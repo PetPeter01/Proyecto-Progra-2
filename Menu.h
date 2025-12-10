@@ -1,0 +1,20 @@
+#pragma once
+#include <string>
+using namespace std;
+
+int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar);
+
+int mostrarMenuPrincipal();
+int mostrarMenuCliente();
+int mostrarMenuProductos();
+int mostrarMenuVentas();
+int mostrarMenuProveedores();
+
+int menuLogicoCliente();
+int menuLogicoProductos();
+int menuLogicoVentas();
+int menuLogicoProveedores();
+
+long long ValidarDocumentoSegunTipo(int tipo);
+
+
