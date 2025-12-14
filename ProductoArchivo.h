@@ -16,7 +16,9 @@ public:
     int agregarRegistro(Producto reg);
     bool listarRegistros();
     Producto leerRegistro(int pos);
+
+    bool existeProducto(const char* descripcion, const char* marca);
     bool bajaLogica();
     int modificarRegistro(Producto reg, int pos);
-        int buscarPorId(int idProducto);
+    int buscarPorId(int idProducto);
 };

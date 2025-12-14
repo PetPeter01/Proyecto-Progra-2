@@ -8,26 +8,20 @@ using namespace std;
 int ProductoArchivo::altaProducto() {
     Producto reg;
 
-    int id = PedirEnteroValido("ID PRODUCTO: ");
-
-    int pos = buscarPorId(id);
-    if (pos < 0) {
-        reg.cargar(id);
-        reg.setIdProducto(id);
-        reg.setEstado(true);
-        if (agregarRegistro(reg) == 1) {
-            return 1;
-        } else {
-            return -1;
-        }
+    reg.cargar();
+    if (!reg.getEstado()){
+        return -1; // error al cargar
     }
 
-    Producto existente = leerRegistro(pos);
-    if (!existente.getEstado()) {
-        return -2;
+    if (existeProducto(reg.getDescripcion(), reg.getMarca())) {
+        return -2; // producto duplicado
     }
 
-    return 0;
+    if (agregarRegistro(reg)) {
+        return 1; // producto guardado
+    }
+    return -3; // error al guardar
+
 }
 
 int ProductoArchivo::agregarRegistro(Producto reg) {
@@ -75,6 +69,26 @@ Producto ProductoArchivo::leerRegistro(int pos) {
 
     return obj;
 }
+
+bool ProductoArchivo::existeProducto(const char* descripcion, const char* marca) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return false;
+
+    Producto reg;
+    while (fread(&reg, sizeof(Producto), 1, p)) {
+        if (reg.getEstado()) {
+            if (strcmp(reg.getDescripcion(), descripcion) == 0 &&
+                strcmp(reg.getMarca(), marca) == 0) {
+                fclose(p);
+                return true;
+            }
+        }
+    }
+
+    fclose(p);
+    return false;
+}
+
 
 bool ProductoArchivo::bajaLogica() {
     Producto reg;
