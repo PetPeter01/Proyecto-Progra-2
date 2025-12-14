@@ -26,7 +26,7 @@ Proveedor::Proveedor() {
     std::strcpy(_telefono, "");
     std::strcpy(_email, "");
     std::strcpy(_direccion, "");
-    _estado = false;  // O true, dependiendo de tu lógica
+    _estado = false;
 }
 
 void Proveedor::cargar() {
@@ -90,7 +90,10 @@ char* Proveedor::getDireccion()   { return _direccion; }
 bool  Proveedor::getEstado()      { return _estado; }
 
 std::string Proveedor::getEstadoStr() {
-    return _estado ? "Activo" : "Eliminado";
+    if (_estado==1){
+        return "activo";
+    }
+    return "eliminado";
 }
 
 // Setters
