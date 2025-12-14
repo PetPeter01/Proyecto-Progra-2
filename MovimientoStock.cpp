@@ -1,0 +1,73 @@
+#include "MovimientoStock.h"
+#include "Fecha.h"
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+MovimientoStock::MovimientoStock() {
+    _idMovimiento = 0;
+    _idProducto = 0;
+    _cantidad = 0;
+    strcpy(_tipoMovimiento, "");
+    _estado = true;
+}
+
+void MovimientoStock::cargar(int idProducto, int cantidad, char* tipo) {
+    setIdProducto(idProducto);
+    setCantidad(cantidad);
+    setTipoMovimiento(tipo);
+
+    Fecha fecha;
+    fecha.cargar();
+    setFecha(fecha);
+
+    _estado = true;
+}
+
+void MovimientoStock::mostrar() {
+    cout << "ID Movimiento: " << _idMovimiento << endl;
+    cout << "ID Producto: " << _idProducto << endl;
+    cout << "Cantidad: " << _cantidad << endl;
+    cout << "Tipo: " << _tipoMovimiento << endl;
+    cout << "Fecha: " << _fecha.toString() << endl;
+}
+
+// Getters
+int MovimientoStock::getIdMovimiento() { return _idMovimiento; }
+int MovimientoStock::getIdProducto() { return _idProducto; }
+int MovimientoStock::getCantidad() { return _cantidad; }
+Fecha MovimientoStock::getFecha() { return _fecha; }
+char* MovimientoStock::getTipoMovimiento() { return _tipoMovimiento; }
+bool MovimientoStock::getEstado() { return _estado; }
+
+// Setters
+void MovimientoStock::setIdMovimiento(int id) { _idMovimiento = id; }
+void MovimientoStock::setIdProducto(int idProducto) { _idProducto = idProducto; }
+
+bool MovimientoStock::setCantidad(int cantidad) {
+    if (cantidad > 0) {
+        _cantidad = cantidad;
+        return true;
+    }
+    return false;
+}
+
+void MovimientoStock::setFecha(Fecha fecha) { _fecha = fecha; }
+
+void MovimientoStock::setTipoMovimiento(char* tipo) {
+    if (strcmp(tipo, "COMPRA") == 0 || strcmp(tipo, "VENTA") == 0) {
+        strcpy(_tipoMovimiento, tipo);
+    }
+}
+
+void MovimientoStock::setEstado(bool estado) { _estado = estado; }
+
+int MovimientoStock::getFactorMovimiento() {
+    if (strcmp(_tipoMovimiento, "COMPRA") == 0) {
+        return 1; // Aumenta stock
+    } else if (strcmp(_tipoMovimiento, "VENTA") == 0) {
+        return -1; // Disminuye stock
+    }
+    return 0;
+}
