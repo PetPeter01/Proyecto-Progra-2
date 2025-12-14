@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string.h>
 
+int Producto::ultimoId=0;
+
 Producto::Producto() {
     _idProducto = 0;
     _tipoEquipo = 0;
@@ -13,13 +15,13 @@ Producto::Producto() {
     _estado = false;
 }
 
-void Producto::cargar(int id) {
+void Producto::cargar() {
 
     char descripcion[50], marca[30];
     int tipo;
     float precio;
 
-    setIdProducto(id);
+    setIdProducto(++ultimoId);
 
     while (true) {
         std::cout << "TIPO DE EQUIPO: " << std::endl;
