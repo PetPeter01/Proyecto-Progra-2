@@ -11,9 +11,11 @@ private:
     char _marca[30];
     bool _estado;
 
+    static int ultimoId;
+
 public:
     Producto();
-    void cargar(int id);
+    void cargar();
     void mostrar();
     //getters
     int getIdProducto();
