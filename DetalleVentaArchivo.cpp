@@ -2,6 +2,7 @@
 #include "DetalleVentaArchivo.h"
 #include "ProductoArchivo.h"
 #include "DetalleVenta.h"
+#include "StockArchivo.h"
 #include "FuncionesGenerales.h"
 using namespace std;
 
@@ -27,7 +28,20 @@ float DetalleVentaArchivo::altaDetalle(int idVenta) {
             continue;
         }
 
-        detalle.cargar(idVenta, idProducto);
+        int cantidad = detalle.cargar(idVenta, idProducto);
+
+        StockArchivo stockArch;
+        int stockDisponible = stockArch.getStock(idProducto);
+
+        if (stockDisponible < 0) {
+            cout << "El producto no tiene stock cargado.\n";
+            continue;
+        }
+
+        if (cantidad > stockDisponible) {
+            cout << "Stock insuficiente.\n";
+            continue;
+        }
 
 
         detalle.setPrecioUnitario(prod.getPrecio());

@@ -10,18 +10,20 @@ DetalleVenta::DetalleVenta() {
     _precioUnitario = 0;
 }
 
-void DetalleVenta::cargar(int idVenta, int idProducto){
+int DetalleVenta::cargar(int idVenta, int idProducto){
     setIdVenta(idVenta);
     setIdProducto(idProducto);
+    int cant;
 
     while(true){
-        int cant = PedirEnteroValido("CANTIDAD: ");
+        cant = PedirEnteroValido("CANTIDAD: ");
         if(setCantidad(cant)){
             break;
         } else {
             std::cout << "Cantidad invalida" << std::endl;
         }
     }
+    return cant;
 
 }
 

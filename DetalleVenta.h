@@ -12,7 +12,7 @@ private:
 public:
     DetalleVenta();
 
-    void cargar(int idVenta, int idProducto);
+    int cargar(int idVenta, int idProducto);
     void mostrar();
     void calcularSubtotal();
 
