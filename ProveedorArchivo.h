@@ -14,6 +14,8 @@ public:
     }
 
     int  altaProveedor();
+    int getProximoId();
+
     int  agregarRegistro(Proveedor reg);
     bool listarRegistros();
     Proveedor leerRegistro(int pos);

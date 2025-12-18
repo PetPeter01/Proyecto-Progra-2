@@ -6,11 +6,10 @@
 
 using namespace std;
 
-int Proveedor::_ultimoId = 0;
 
-Proveedor::Proveedor(const char* nombre, const char* telefono, const char* email, const char* direccion) {
+Proveedor::Proveedor(int id, const char* nombre, const char* telefono, const char* email, const char* direccion) {
 
-    _idProveedor = ++_ultimoId;
+    _idProveedor = id;
 
     std::strcpy(_nombre, nombre);
     std::strcpy(_telefono, telefono);
@@ -29,13 +28,13 @@ Proveedor::Proveedor() {
     _estado = false;
 }
 
-void Proveedor::cargar() {
+void Proveedor::cargar(int id) {
     char nombre[50];
     char telefono[20];
     char email[50];
     char direccion[50];
 
-    setIdProveedor(++_ultimoId);
+    setIdProveedor(id);
 
     while (true) {
         cout << "NOMBRE DEL PROVEEDOR: ";

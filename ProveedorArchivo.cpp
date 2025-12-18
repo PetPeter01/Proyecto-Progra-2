@@ -8,13 +8,31 @@ using namespace std;
 
 int ProveedorArchivo::altaProveedor() {
     Proveedor p;
-    p.cargar();
+
+    int id = getProximoId();
+    p.cargar(id);
+    if(!p.getEstado()){
+        return -1; // error al cargar
+    }
 
     ProveedorArchivo archivo;
     archivo.agregarRegistro(p);
 
     cout << "Proveedor creado con ID: " << p.getIdProveedor() << endl;
+    return 1; // ok
 }
+
+int ProveedorArchivo::getProximoId() {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return 1;
+
+    fseek(p, 0, SEEK_END);
+    int cant = ftell(p) / sizeof(Proveedor);
+    fclose(p);
+
+    return cant + 1;
+}
+
 
 int ProveedorArchivo::agregarRegistro(Proveedor reg) {
     FILE* p = fopen(_nombreArchivo, "ab");

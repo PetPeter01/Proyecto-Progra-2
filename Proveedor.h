@@ -11,14 +11,12 @@ private:
     char _direccion[50];
     bool _estado;
 
-    static int _ultimoId;
-
 public:
-    Proveedor(const char* nombre, const char* telefono, const char* email, const char* direccion);
+    Proveedor(int id, const char* nombre, const char* telefono, const char* email, const char* direccion);
 
     Proveedor();
 
-    void cargar();
+    void cargar(int id);
     void mostrar();
 
     // Getters
