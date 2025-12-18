@@ -11,7 +11,8 @@ int mostrarMenuTiposEquipo();
 int mostrarMenuVentas();
 int mostrarMenuProveedores();
 int mostrarMenuCompras();
-
+int mostrarMenuEmpleados();
+int menuLogicoEmpleados();
 int menuLogicoTiposEquipo();
 int menuLogicoCliente();
 int menuLogicoProductos();

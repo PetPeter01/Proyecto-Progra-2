@@ -10,6 +10,8 @@
 #include "VentaArchivo.h"
 #include "ProveedorArchivo.h"
 #include "TiposDeEquipoArchivo.h"
+#include "Empleado.h"
+#include "EmpleadoArchivo.h"
 
 using namespace std;
 
@@ -37,7 +39,7 @@ int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar) {
 
 int mostrarMenuPrincipal() {
     int y = 0;
-    const int cantidadOpciones = 5;
+    const int cantidadOpciones = 7;
     bool seleccionar = false;
     int yAnterior = -1;
 
@@ -48,7 +50,8 @@ int mostrarMenuPrincipal() {
     rlutil::locate(55, 13); cout << "MENU VENTAS";
     rlutil::locate(55, 14); cout << "MENU PROVEEDORES";
     rlutil::locate(55, 15); cout << "MENU TIPOS DE EQUIPO";
-    rlutil::locate(55, 16); cout << "SALIR";
+    rlutil::locate(55, 16); cout << "MENU EMPLEADOS";
+    rlutil::locate(55, 17); cout << "SALIR";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -686,6 +689,93 @@ int menuLogicoTiposEquipo() {
         }
 
     } while (opcion != 3);
+
+    return 0;
+}
+int mostrarMenuEmpleados() {
+    int y = 0;
+    const int cantidadOpciones = 6;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- MENU EMPLEADOS ---";
+    rlutil::locate(55, 11); cout << " ALTA EMPLEADO";
+    rlutil::locate(55, 12); cout << " BAJA LOGICA EMPLEADO";
+    rlutil::locate(55, 13); cout << " REACTIVAR EMPLEADO";
+    rlutil::locate(55, 14); cout << " LISTAR EMPLEADOS ACTIVOS";
+    rlutil::locate(55, 15); cout << " LISTAR TODOS LOS EMPLEADOS";
+    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
+int menuLogicoEmpleados() {
+    rlutil::showcursor();
+    EmpleadoArchivo arch;
+    int opcion;
+
+    do {
+        opcion = mostrarMenuEmpleados();
+        rlutil::cls();
+
+        switch (opcion) {
+            case 0: {
+                cout << "--- ALTA EMPLEADO ---\n";
+                arch.altaEmpleado();
+                cout << "CLIENTE CARGADO CORRECTAMENTE" << endl;
+                system("pause");
+                break;
+            }
+            case 1: {
+                cout << "--- BAJA LOGICA EMPLEADO ---\n";
+                int id = PedirEnteroValido("ID EMPLEADO: ");
+                arch.bajaLogica(id);
+                system("pause");
+                break;
+            }
+            case 2: {
+                cout << "--- REACTIVAR EMPLEADO ---\n";
+                int id = PedirEnteroValido("ID EMPLEADO: ");
+                arch.reactivarEmpleado(id);
+                system("pause");
+                break;
+            }
+            case 3: {
+                cout << "--- EMPLEADOS ACTIVOS ---\n";
+                arch.listarEmpleados();
+                system("pause");
+                break;
+            }
+            case 4: {
+                cout << "--- TODOS LOS EMPLEADOS ---\n";
+                arch.listarEmpleados();
+                system("pause");
+                break;
+            }
+            case 5:
+                break;
+            default:
+                cout << "Opcion invalida\n";
+                system("pause");
+        }
+
+    } while (opcion != 5);
 
     return 0;
 }
