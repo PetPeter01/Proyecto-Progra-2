@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
 #include <cstring>
+#include <string>
 
 class Producto {
 private:
     int _idProducto;
-    int _tipoEquipo;
+    int _idTipoEquipo;
     float _precio;
     char _descripcion[50];
     char _marca[30];
@@ -15,24 +16,28 @@ private:
 
 public:
     Producto();
-    void cargar();
+    void cargar(int idTipoEquipo, float precio);
+
     void mostrar();
-    //getters
+
+
     int getIdProducto();
+    int getIdTipoEquipo();
+    int getStock();
+    float getPrecio();
     char* getDescripcion();
     char* getMarca();
-    int getTipoEquipo();
-    float getPrecio();
     bool getEstado();
 
     std::string getTipoEquipoStr();
     std::string getEstadoStr();
 
-    // Setters
+
     void setIdProducto(int id);
+    bool setIdTipoEquipo(int idTipo);
+    bool setStock(int s);
     bool setPrecio(float precio);
-    void setDescripcion(char* desc);
-    void setMarca(char* marca);
-    bool setTipoEquipo(int tipoEquipo);
+    bool setDescripcion(char* desc);
+    bool setMarca(char* marca);
     void setEstado(bool estado);
 };
