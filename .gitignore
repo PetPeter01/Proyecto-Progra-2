@@ -1,0 +1,12 @@
+# Archivos compilados
+*.o
+*.obj
+*.exe
+
+# Code::Blocks
+*.cbp
+*.layout
+
+# Carpetas de build
+bin/
+obj/
