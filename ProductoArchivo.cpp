@@ -11,7 +11,6 @@ int ProductoArchivo::altaProducto() {
     Producto reg;
 
     TiposDeEquipoArchivo archTipos;
-    archTipos.inicializar10PorDefecto();
 
     int codTipo;
     while (true) {
@@ -73,7 +72,8 @@ string ProductoArchivo::getTipoEquipoStr(Producto& p) {
     if (pos < 0) return "DESCONOCIDO";
 
     return arch.leerRegistro(pos).getDescripcion();
-}
+} // esto debería ir en TipoEquipoProducto, tho.
+
 
 
 
