@@ -2,6 +2,7 @@
 #include "FuncionesGenerales.h"
 #include <iostream>
 #include <string.h>
+//jola prueba2
 
 Cliente::Cliente() {
     _tipoCliente = 0;
