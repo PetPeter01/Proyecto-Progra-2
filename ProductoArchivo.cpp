@@ -3,6 +3,7 @@
 #include <cstring>
 #include "ProductoArchivo.h"
 #include "TiposDeEquipoArchivo.h"
+#include "StockArchivo.h"
 #include "FuncionesGenerales.h"
 
 using namespace std;
@@ -78,15 +79,25 @@ string ProductoArchivo::getTipoEquipoStr(Producto& p) {
 
 
 bool ProductoArchivo::listarRegistros() {
+    StockArchivo s;
     Producto prod;
     FILE* pProd = fopen(_nombreArchivo, "rb");
     if (pProd == nullptr) return false;
 
     while (fread(&prod, tamanioRegistro, 1, pProd) == 1) {
         if (prod.getEstado()) {
+            int id = prod.getIdProducto();
             prod.mostrar();
-            cout << "Tipo de equipo: "
-                 << getTipoEquipoStr(prod) << endl;
+            cout << "Tipo de equipo: ";
+            cout << getTipoEquipoStr(prod) << endl;
+            int stock = s.getStock(id);
+            if(stock==-1){
+                cout << "STOCK: No hay stock cargado" << endl;
+            } else if (stock==0){
+                cout << "STOCK: Sin stock" << endl;
+                } else if (stock>0){
+                    cout << "STOCK: " << stock << endl;
+                }
             cout << "--------------------------------" << endl;
         }
     }
