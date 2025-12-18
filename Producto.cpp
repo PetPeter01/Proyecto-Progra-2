@@ -5,7 +5,6 @@
 
 using namespace std;
 
-int Producto::ultimoId = 0;
 
 Producto::Producto() {
     _idProducto = 0;
@@ -16,8 +15,8 @@ Producto::Producto() {
     _estado = false;
 }
 
-void Producto::cargar(int idTipoEquipo, float precio){
-    setIdProducto(++ultimoId);
+void Producto::cargar(int idProducto, int idTipoEquipo, float precio){
+    setIdProducto(idProducto);
     setIdTipoEquipo(idTipoEquipo);
     setPrecio(precio);
     char marca[30], desc[50];

@@ -14,6 +14,8 @@ public:
     }
 
     int altaProducto();
+    int getProximoId();
+
     int agregarRegistro(Producto reg);
     std::string getTipoEquipoStr(Producto& p);
     bool listarRegistros();

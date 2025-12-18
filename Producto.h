@@ -12,11 +12,9 @@ private:
     char _marca[30];
     bool _estado;
 
-    static int ultimoId;
-
 public:
     Producto();
-    void cargar(int idTipoEquipo, float precio);
+    void cargar(int id, int idTipoEquipo, float precio);
 
     void mostrar();
 

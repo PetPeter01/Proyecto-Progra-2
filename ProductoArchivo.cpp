@@ -36,8 +36,8 @@ int ProductoArchivo::altaProducto() {
     }
 
     float precio = pedirFloatValido("PRECIO: ");
-
-    reg.cargar(codTipo, precio);
+    int id = getProximoId();
+    reg.cargar(id, codTipo, precio);
 
     if (!reg.getEstado()){
         return -1; // error al cargar
@@ -51,6 +51,17 @@ int ProductoArchivo::altaProducto() {
         return 1; // producto guardado
     }
     return -3; // error al guardar
+}
+
+int ProductoArchivo::getProximoId() {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return 1;
+
+    fseek(p, 0, SEEK_END);
+    int cant = ftell(p) / sizeof(Producto);
+    fclose(p);
+
+    return cant + 1;
 }
 
 
@@ -74,9 +85,6 @@ string ProductoArchivo::getTipoEquipoStr(Producto& p) {
 
     return arch.leerRegistro(pos).getDescripcion();
 } // esto debería ir en TipoEquipoProducto, tho.
-
-
-
 
 bool ProductoArchivo::listarRegistros() {
     StockArchivo s;
