@@ -10,3 +10,6 @@
 # Carpetas de build
 bin/
 obj/
+
+*.dat
+*.depend
