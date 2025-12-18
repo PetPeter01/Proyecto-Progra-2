@@ -117,7 +117,7 @@ bool ClienteArchivo::bajaLogica() {
 
     reg = leerRegistro(pos);
     if (!reg.getEstado()) {
-        cout << "El cliente ya est� dado de baja.\n";
+        cout << "El cliente ya esta dado de baja.\n";
         return false;
     }
 
