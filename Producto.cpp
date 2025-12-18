@@ -1,138 +1,116 @@
 #include "Producto.h"
 #include "FuncionesGenerales.h"
-
 #include <iostream>
 #include <string.h>
 
-int Producto::ultimoId=0;
+using namespace std;
+
+int Producto::ultimoId = 0;
 
 Producto::Producto() {
     _idProducto = 0;
-    _tipoEquipo = 0;
+    _idTipoEquipo = 0;
     _precio = 0;
     strcpy(_descripcion, "");
     strcpy(_marca, "");
     _estado = false;
 }
 
-void Producto::cargar() {
+void Producto::cargar(int idTipoEquipo, float precio){
+    setIdTipoEquipo(idTipoEquipo);
+    setPrecio(precio);
+    char marca[30], desc[50];
 
-    char descripcion[50], marca[30];
-    int tipo;
-    float precio;
+    while (true){
+        cout << "DESCRIPCION: ";
+        cin.getline(desc, 50);
 
-    setIdProducto(++ultimoId);
-
-    while (true) {
-        std::cout << "TIPO DE EQUIPO: " << std::endl;
-        std::cout << "1. PC" << std::endl;
-        std::cout << "2. PORTATIL" << std::endl;
-        std::cout << "3. PERIFERICO" << std::endl;
-        std::cout << "4. COMPONENTE" << std::endl;
-        std::cout << "Seleccione una opcion: ";
-        tipo = PedirEnteroValido("INGRESE UNA OPCION: ");
-
-        if (setTipoEquipo(tipo)) {
+        if (setDescripcion(desc)) {
             break;
-        } else {
-            std::cout << "Opcion invalida. Ingrese un valor entre 1 y 4.\n";
         }
+        cout << "Descripcion invalida.\n";
     }
 
-    while (true) {
-    std::cout << "INGRESE EL PRECIO: ";
-    std::cin >> precio;
+    while (true){
+        cout << "MARCA: ";
+        cin.getline(marca, 30);
 
-    if (std::cin.fail() || !setPrecio(precio)){
-        std::cin.clear();
-        std::cin.ignore();
-        std::cout << "Precio invalido.\n";
-    } else {
-        break;
-        }
-    }
-    while (true) {
-        cin.ignore();
-        std::cout << "INGRESE DESCRIPCION DEL PRODUCTO: ";
-        std::cin.getline(descripcion, 50);
-        if (strlen(descripcion) > 0) {
-            setDescripcion(descripcion);
+        if (setMarca(marca)) {
             break;
-        } else {
-            std::cout << "Descripcion invalida. Intente nuevamente.\n";
         }
-    }
-
-    while (true) {
-        std::cout << "INGRESE MARCA: ";
-        std::cin.getline(marca, 30);
-        if (strlen(marca) > 0) {
-            setMarca(marca);
-            break;
-        } else {
-            std::cout << "Marca invalida. Intente nuevamente.\n";
-        }
+        cout << "Marca invalida.\n";
     }
 
     setEstado(true);
-    std::cin.ignore();
 }
 
-void Producto::mostrar(){
-    std::cout << "ID Producto: " << _idProducto << std::endl;
-    std::cout << "Tipo Equipo: " << getTipoEquipoStr() << std::endl;
-    std::cout << "Precio: " << _precio << std::endl;
-    std::cout<< "Descripcion: " << _descripcion << std::endl;
-    std::cout<< "Marca: " << _marca << std::endl;
-    std::cout<< "Estado: " << getEstadoStr() << std::endl;
-
-    std::cout << "--------------------------------"<< std::endl;
+void Producto::mostrar() {
+    cout << "ID Producto: " << _idProducto << endl;
+    cout << "Estado: " << getEstadoStr() << endl;
+    cout << "Precio: " << _precio << endl;
+    cout << "Descripcion: " << _descripcion << endl;
+    cout << "Marca: " << _marca << endl;
 }
 
-// --- Getters ---
+
 int Producto::getIdProducto() { return _idProducto; }
-float Producto::getPrecio() {return _precio; }
+int Producto::getIdTipoEquipo() { return _idTipoEquipo; }
+float Producto::getPrecio() { return _precio; }
 char* Producto::getDescripcion() { return _descripcion; }
-int Producto::getTipoEquipo() { return _tipoEquipo; }
 char* Producto::getMarca() { return _marca; }
 bool Producto::getEstado() { return _estado; }
 
-std::string Producto::getTipoEquipoStr(){
-    switch(_tipoEquipo){
-        case 1: return "PC";
-        case 2: return "PORTATILES";
-        case 3: return "PERIFERICOS";
-        case 4: return "COMPONENTES";
-        default: return "DESCONOCIDO";
-    }
-}
-std::string Producto::getEstadoStr(){
-    if(_estado==true){
-        return "Activo";
-    } else {
-        return "Desactivado";
-    }
+std::string Producto::getEstadoStr() {
+    return _estado ? "Activo" : "Desactivado";
 }
 
-// --- Setters ---
+
 void Producto::setIdProducto(int idProducto) { _idProducto = idProducto; }
 
-bool Producto::setPrecio(float precio){
-    if(precio<=0){
-        return false;
-    }
-    _precio = precio;
-    return true;
-}
-void Producto::setDescripcion(char* desc) { std::strcpy(_descripcion, desc); }
-void Producto::setMarca(char* marca) { std::strcpy(_marca, marca); }
-bool Producto::setTipoEquipo(int tipoEquipo) {
-    if(tipoEquipo>=1 && tipoEquipo<=4){
-    _tipoEquipo = tipoEquipo;
-    return true;
+bool Producto::setIdTipoEquipo(int idTipo) {
+    if (idTipo > 0) {
+        _idTipoEquipo = idTipo;
+        return true;
     }
     return false;
 }
+
+bool Producto::setStock(int s) {
+    if (s < 0) return false;
+    return true;
+}
+
+bool Producto::setPrecio(float precio) {
+    if (precio <= 0) return false;
+    _precio = precio;
+    return true;
+}
+
+bool Producto::setDescripcion(char* desc) {
+    if (desc == nullptr || strlen(desc) == 0) return false;
+
+    strncpy(_descripcion, desc, sizeof(_descripcion) - 1);
+    _descripcion[sizeof(_descripcion) - 1] = '\0';
+    return true;
+}
+
+
+bool Producto::setMarca(char* marca) {
+    if (marca == nullptr || strlen(marca) == 0) {
+        return false;
+    }
+
+    for (int i = 0; marca[i] != '\0'; i++) {
+        if (!isalnum(marca[i]) && marca[i] != ' ') {
+            return false;
+        }
+    }
+
+    strncpy(_marca, marca, sizeof(_marca) - 1);
+    _marca[sizeof(_marca) - 1] = '\0';
+
+    return true;
+}
+
+
 void Producto::setEstado(bool estado) { _estado = estado; }
-
-
