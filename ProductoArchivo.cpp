@@ -2,13 +2,43 @@
 #include <cstdio>
 #include <cstring>
 #include "ProductoArchivo.h"
+#include "TiposDeEquipoArchivo.h"
 #include "FuncionesGenerales.h"
+
 using namespace std;
 
 int ProductoArchivo::altaProducto() {
     Producto reg;
 
-    reg.cargar();
+    TiposDeEquipoArchivo archTipos;
+    archTipos.inicializar10PorDefecto();
+
+    int codTipo;
+    while (true) {
+        cout << "TIPOS DE EQUIPO ACTIVOS:\n";
+        archTipos.listarActivos();
+
+        codTipo = PedirEnteroValido("CODIGO TIPO DE EQUIPO: ");
+        int pos = archTipos.buscarPorId(codTipo);
+
+        if (pos < 0) {
+            cout << "No existe ese tipo.\n";
+            system("pause");
+            continue;
+        }
+
+        if (!archTipos.leerRegistro(pos).getEstado()) {
+            cout << "Ese tipo esta INACTIVO.\n";
+            system("pause");
+            continue;
+        }
+        break;
+    }
+
+    float precio = pedirFloatValido("PRECIO: ");
+
+    reg.cargar(codTipo, precio);
+
     if (!reg.getEstado()){
         return -1; // error al cargar
     }
@@ -21,14 +51,13 @@ int ProductoArchivo::altaProducto() {
         return 1; // producto guardado
     }
     return -3; // error al guardar
-
 }
+
 
 int ProductoArchivo::agregarRegistro(Producto reg) {
     FILE* pProd = fopen(_nombreArchivo, "ab");
     if (pProd == nullptr) {
-        cout << "ERROR DE ARCHIVO";
-        return -1;
+        return -1; // error de archivo
     }
 
     int escribio = fwrite(&reg, tamanioRegistro, 1, pProd);
@@ -37,23 +66,35 @@ int ProductoArchivo::agregarRegistro(Producto reg) {
     return escribio;
 }
 
+string ProductoArchivo::getTipoEquipoStr(Producto& p) {
+    TiposDeEquipoArchivo arch;
+
+    int pos = arch.buscarPorId(p.getIdTipoEquipo());
+    if (pos < 0) return "DESCONOCIDO";
+
+    return arch.leerRegistro(pos).getDescripcion();
+}
+
+
+
 bool ProductoArchivo::listarRegistros() {
     Producto prod;
     FILE* pProd = fopen(_nombreArchivo, "rb");
-
-    if (pProd == nullptr) {
-        return false;
-    }
+    if (pProd == nullptr) return false;
 
     while (fread(&prod, tamanioRegistro, 1, pProd) == 1) {
         if (prod.getEstado()) {
             prod.mostrar();
+            cout << "Tipo de equipo: "
+                 << getTipoEquipoStr(prod) << endl;
+            cout << "--------------------------------" << endl;
         }
     }
 
     fclose(pProd);
     return true;
 }
+
 
 Producto ProductoArchivo::leerRegistro(int pos) {
     Producto obj;

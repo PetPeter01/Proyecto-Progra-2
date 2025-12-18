@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Producto.h"
 
 class ProductoArchivo {
@@ -14,6 +15,7 @@ public:
 
     int altaProducto();
     int agregarRegistro(Producto reg);
+    std::string getTipoEquipoStr(Producto& p);
     bool listarRegistros();
     Producto leerRegistro(int pos);
 
