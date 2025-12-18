@@ -5,7 +5,6 @@
 #include "TiposDeEquipoArchivo.h"
 #include "StockArchivo.h"
 #include "FuncionesGenerales.h"
-// prueba para git
 using namespace std;
 
 int ProductoArchivo::altaProducto() {
