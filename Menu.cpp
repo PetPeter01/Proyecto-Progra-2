@@ -9,7 +9,7 @@
 #include "ProductoArchivo.h"
 #include "VentaArchivo.h"
 #include "ProveedorArchivo.h"
-
+#include "TiposDeEquipoArchivo.h"
 
 using namespace std;
 
@@ -47,7 +47,8 @@ int mostrarMenuPrincipal() {
     rlutil::locate(55, 12); cout << "MENU PRODUCTOS";
     rlutil::locate(55, 13); cout << "MENU VENTAS";
     rlutil::locate(55, 14); cout << "MENU PROVEEDORES";
-    rlutil::locate(55, 15); cout << "SALIR";
+    rlutil::locate(55, 15); cout << "MENU TIPOS DE EQUIPO";
+    rlutil::locate(55, 16); cout << "SALIR";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -196,7 +197,34 @@ int mostrarMenuProveedores() {
 
     return y;
 }
+int mostrarMenuTiposEquipo() {
+    int y = 0;
+    const int cantidadOpciones = 4;
+    bool seleccionar = false;
+    int yAnterior = -1;
 
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- MENU TIPOS DE EQUIPO ---";
+    rlutil::locate(55, 11); cout << " VER TODOS";
+    rlutil::locate(55, 12); cout << " VER SOLO ACTIVOS";
+    rlutil::locate(55, 13); cout << " ACTIVAR / DESACTIVAR";
+    rlutil::locate(55, 14); cout << " VOLVER AL MENU PRINCIPAL";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
 long long ValidarDocumentoSegunTipo(int tipo) {
    rlutil::showcursor();
     Cliente c;
@@ -594,3 +622,70 @@ int menuLogicoProveedores() {
     return 0;
 }
 
+int menuLogicoTiposEquipo() {
+    rlutil::showcursor();
+    TiposDeEquipoArchivo archTipos;
+
+    int opcion;
+    do {
+        opcion = mostrarMenuTiposEquipo();
+        rlutil::cls();
+
+        switch (opcion) {
+            case 0: {
+                cout << "TIPOS DE EQUIPO;" << endl;
+                cout << "------------------------------\n";
+                archTipos.listarTodos();
+                system("pause");
+                break;
+            }
+            case 1: {
+                cout << "TIPOS DE EQUIPO (ACTIVOS)\n";
+                cout << "------------------------------\n";
+                archTipos.listarActivos();
+                system("pause");
+                break;
+            }
+            case 2: {
+                cout << "CAMBIAR ESTADO DE TIPO DE EQUIPO\n";
+                cout << "--------------------------------\n";
+                archTipos.listarTodos();
+
+                int id = PedirEnteroValido("CODIGO DEL TIPO A CAMBIAR: ");
+
+                int pos = archTipos.buscarPorId(id);
+                if (pos < 0) {
+                    cout << "No existe ese codigo.\n";
+                    system("pause");
+                    break;
+                }
+
+                TiposDeEquipo te = archTipos.leerRegistro(pos);
+
+                cout << "\nSeleccionado: " << te.getDescripcion()
+                     << " | Estado actual: " << (te.getEstado() ? "ACTIVO" : "INACTIVO") << "\n";
+
+                int op = PedirEnteroValido("1) Activar  2) Desactivar: ");
+                if (op == 1) te.setEstado(true);
+                else if (op == 2) te.setEstado(false);
+                else {
+                    cout << "Opcion invalida.\n";
+                    system("pause");
+                    break;
+                }
+
+                int ok = archTipos.modificarRegistro(te, pos);
+                if (ok == 1) cout << "Estado actualizado.\n";
+                else cout << "No se pudo guardar.\n";
+
+                system("pause");
+                break;
+            }
+            case 3:
+                break;
+        }
+
+    } while (opcion != 3);
+
+    return 0;
+}

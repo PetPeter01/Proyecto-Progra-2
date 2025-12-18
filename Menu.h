@@ -9,7 +9,10 @@ int mostrarMenuCliente();
 int mostrarMenuProductos();
 int mostrarMenuVentas();
 int mostrarMenuProveedores();
+int mostrarMenuTiposEquipo();
 
+
+int menuLogicoTiposEquipo();
 int menuLogicoCliente();
 int menuLogicoProductos();
 int menuLogicoVentas();
