@@ -7,10 +7,10 @@ int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar);
 int mostrarMenuPrincipal();
 int mostrarMenuCliente();
 int mostrarMenuProductos();
+int mostrarMenuTiposEquipo();
 int mostrarMenuVentas();
 int mostrarMenuProveedores();
-int mostrarMenuTiposEquipo();
-
+int mostrarMenuCompras();
 
 int menuLogicoTiposEquipo();
 int menuLogicoCliente();
