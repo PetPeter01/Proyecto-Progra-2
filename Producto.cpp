@@ -17,6 +17,7 @@ Producto::Producto() {
 }
 
 void Producto::cargar(int idTipoEquipo, float precio){
+    setIdProducto(++ultimoId);
     setIdTipoEquipo(idTipoEquipo);
     setPrecio(precio);
     char marca[30], desc[50];
