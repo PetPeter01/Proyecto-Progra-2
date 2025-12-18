@@ -169,6 +169,7 @@ int ClienteArchivo::BuscarPorDocumento(long long documentoBuscado) {
     fclose(pCliente);
     return -1;
 }
+
 void ClienteArchivo::BuscarPorNombre(const char* nombreBuscado) {
     Cliente reg;
     FILE* p = fopen(_nombreArchivo, "rb");
@@ -216,7 +217,6 @@ void ClienteArchivo::BuscarPorApellido(const char* apellidoBuscado) {
 
     fclose(p);
 }
-
 
 int ClienteArchivo::reactivarCliente(long long documento) {
     int pos = BuscarPorDocumento(documento);
