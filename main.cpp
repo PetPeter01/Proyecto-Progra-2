@@ -38,8 +38,10 @@ int main() {
                 menuLogicoTiposEquipo();
                 system("pause");
                 break;
-
             case 5:
+                menuLogicoEmpleados();
+                break;
+            case 6:
                 cout << endl << "Saliendo...\n";
                 return 0;
 
