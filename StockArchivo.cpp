@@ -73,15 +73,21 @@ int StockArchivo::getStock(int id){
 
 bool StockArchivo::sumarStock(int idProducto, int cantidad) {
     int pos = buscarPorIdProducto(idProducto);
-    if (pos < 0){
-        return false;
+
+    if (pos >= 0) {
+        Stock reg = leerRegistro(pos);
+        reg.setCantidad(reg.getCantidad() + cantidad);
+        return modificarRegistro(reg, pos);
     }
+    else {
+        Stock nuevo;
+        nuevo.setIdProducto(idProducto);
+        nuevo.setCantidad(cantidad);
 
-    Stock reg = leerRegistro(pos);
-    reg.setCantidad(reg.getCantidad() + cantidad);
-
-    return modificarRegistro(reg, pos);
+        return agregarRegistro(nuevo);
+    }
 }
+
 
 bool StockArchivo::restarStock(int idProducto, int cantidad) {
     int pos = buscarPorIdProducto(idProducto);
