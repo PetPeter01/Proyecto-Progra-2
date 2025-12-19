@@ -12,6 +12,7 @@
 #include "TiposDeEquipoArchivo.h"
 #include "Empleado.h"
 #include "EmpleadoArchivo.h"
+#include "CompraArchivo.h"
 
 using namespace std;
 
@@ -37,9 +38,10 @@ int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar) {
     return y;
 }
 
+// MENUS VISUALES
 int mostrarMenuPrincipal() {
     int y = 0;
-    const int cantidadOpciones = 7;
+    const int cantidadOpciones = 8;
     bool seleccionar = false;
     int yAnterior = -1;
 
@@ -51,7 +53,8 @@ int mostrarMenuPrincipal() {
     rlutil::locate(55, 14); cout << "MENU PROVEEDORES";
     rlutil::locate(55, 15); cout << "MENU TIPOS DE EQUIPO";
     rlutil::locate(55, 16); cout << "MENU EMPLEADOS";
-    rlutil::locate(55, 17); cout << "SALIR";
+    rlutil::locate(55, 17); cout << "MENU COMPRAS";
+    rlutil::locate(55, 18); cout << "SALIR";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -200,6 +203,7 @@ int mostrarMenuProveedores() {
 
     return y;
 }
+
 int mostrarMenuTiposEquipo() {
     int y = 0;
     const int cantidadOpciones = 4;
@@ -228,6 +232,38 @@ int mostrarMenuTiposEquipo() {
 
     return y;
 }
+
+int mostrarMenuCompras() {
+    int y = 0;
+    const int cantidadOpciones = 6;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- MENU COMPRAS ---";
+    rlutil::locate(55, 11); cout << " NUEVA COMPRA";
+    rlutil::locate(55, 12); cout << " BORRAR COMPRA";
+    rlutil::locate(55, 13); cout << " LISTAR COMPRAS";
+    rlutil::locate(55, 14); cout << " GASTO ANUAL";
+    rlutil::locate(55, 15); cout << " LISTAR COMPRAS POR EMPLEADO";
+    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
 long long ValidarDocumentoSegunTipo(int tipo) {
    rlutil::showcursor();
     Cliente c;
@@ -260,6 +296,7 @@ long long ValidarDocumentoSegunTipo(int tipo) {
     return documento;
 }
 
+// MENUS LOGICOS
 int menuLogicoCliente() {
     rlutil::showcursor();
     int opcion;
@@ -547,6 +584,82 @@ int menuLogicoVentas() {
     return 0;
 }
 
+int menuLogicoCompras() {
+    int opcion;
+    CompraArchivo cArch;
+
+    do {
+        opcion = mostrarMenuCompras();
+
+        switch (opcion) {
+            case 0: {
+                system("cls");
+                cout << "Agregar compra...\n";
+                cout << "--------------------------\n";
+                cArch.altaCompra();
+                system("pause");
+                break;
+            }
+            case 1: {
+                system("cls");
+                cout << "Borrar compra...\n";
+                int idCompra = PedirEnteroValido(
+                    "INGRESE EL ID DE LA COMPRA A BORRAR: "
+                );
+                bool ok = cArch.bajaLogica(idCompra);
+                cout << (ok ? "Baja realizada correctamente.\n"
+                            : "No se pudo dar de baja.\n");
+                system("pause");
+                break;
+            }
+            case 2: {
+                system("cls");
+                cout << "COMPRAS REGISTRADAS\n";
+                cout << "---------------------------------\n";
+                cArch.listarRegistros();
+                system("pause");
+                break;
+            }
+            case 3: {
+                system("cls");
+                cout << "GASTO ANUAL\n";
+                cout << "---------------------------------\n";
+                /*int anio = PedirEnteroValido("Anio: ");
+                if (anio > 2000 && anio < 2999) {
+                    float total = cArch.gastoAnual(anio);
+                    if (total >= 0) {
+                        cout << "Gasto total del anio "
+                             << anio << ": $" << total << endl;
+                    } else {
+                        cout << "Error al abrir el archivo de compras.\n";
+                    }
+                } else {
+                    cout << "Anio invalido.\n";
+                }
+                system("pause");*/
+                break;
+            }
+            case 4: {
+                system("cls");
+                cout << "COMPRAS POR EMPLEADO\n";
+                cout << "---------------------------------\n";
+                /*int idEmpleado = PedirEnteroValido("ID del empleado: ");
+                cArch.listarComprasPorEmpleado(idEmpleado);
+                system("pause");*/
+                break;
+            }
+            case 5:
+                cout << "Volviendo al menu principal...\n";
+                break;
+        }
+
+    } while (opcion != 5);
+
+    return 0;
+}
+
+
+
 int menuLogicoProveedores() {
     rlutil::showcursor();
     ProveedorArchivo pArch;
@@ -692,6 +805,7 @@ int menuLogicoTiposEquipo() {
 
     return 0;
 }
+
 int mostrarMenuEmpleados() {
     int y = 0;
     const int cantidadOpciones = 6;

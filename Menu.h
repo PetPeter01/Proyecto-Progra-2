@@ -12,12 +12,14 @@ int mostrarMenuVentas();
 int mostrarMenuProveedores();
 int mostrarMenuCompras();
 int mostrarMenuEmpleados();
+
 int menuLogicoEmpleados();
 int menuLogicoTiposEquipo();
 int menuLogicoCliente();
 int menuLogicoProductos();
 int menuLogicoVentas();
 int menuLogicoProveedores();
+int menuLogicoCompras();
 
 long long ValidarDocumentoSegunTipo(int tipo);
 
