@@ -14,6 +14,7 @@ public:
     }
 
     float altaDetalle(int idCompra);
+    int getProximoId();
     int   agregarRegistro(DetalleCompra reg);
     int   listarPorCompra(int idCompra);
     float totalPorCompra(int idCompra);

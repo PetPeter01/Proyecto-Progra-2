@@ -1,6 +1,7 @@
 #include "DetalleCompraArchivo.h"
 #include "ProductoArchivo.h"
 #include "FuncionesGenerales.h"
+#include "StockArchivo.h"
 #include <iostream>
 #include <cstdio>
 
@@ -8,27 +9,16 @@ using namespace std;
 
 float DetalleCompraArchivo::altaDetalle(int idCompra) {
     ProductoArchivo archProducto;
+    StockArchivo stockArch;
     DetalleCompra   det;
     float total = 0.0f;
     int   continuar = 1;
 
-    // Calcula el  próximo idDetalleCompra
-    int ultimoId = 0;
-    FILE* p = fopen(_nombreArchivo, "rb");
-    if (p != nullptr) {
-        DetalleCompra aux;
-        while (fread(&aux, tamanioRegistro, 1, p) == 1) {
-            if (aux.getIdDetalleCompra() > ultimoId) {
-                ultimoId = aux.getIdDetalleCompra();
-            }
-        }
-        fclose(p);
-    }
-    int siguienteId = ultimoId + 1;
+    int id = getProximoId();
 
     while (continuar == 1) {
         int idProducto = PedirEnteroValido("ID PRODUCTO: ");
-        int posProd    = archProducto.buscarPorId(idProducto);
+        int posProd = archProducto.buscarPorId(idProducto);
 
         if (posProd < 0) {
             cout << "Producto no encontrado.\n";
@@ -43,13 +33,13 @@ float DetalleCompraArchivo::altaDetalle(int idCompra) {
             continue;
         }
 
-        det.cargar(siguienteId, idCompra, idProducto);
-        siguienteId++;
+        det.cargar(id, idCompra, idProducto);
 
         int guardo = agregarRegistro(det);
         if (guardo == 1) {
             cout << "Detalle de compra guardado con exito.\n";
             total += det.getCantidad() * det.getCostoUnitario();
+            stockArch.sumarStock(idProducto, det.getCantidad());
         } else {
             cout << "Error al guardar el detalle de compra.\n";
         }
@@ -60,6 +50,17 @@ float DetalleCompraArchivo::altaDetalle(int idCompra) {
     }
 
     return total;
+}
+
+int DetalleCompraArchivo::getProximoId() {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return 1;
+
+    fseek(p, 0, SEEK_END);
+    int cant = ftell(p) / sizeof(DetalleCompra);
+    fclose(p);
+
+    return cant + 1;
 }
 
 int DetalleCompraArchivo::agregarRegistro(DetalleCompra reg) {
