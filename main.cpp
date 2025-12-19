@@ -42,6 +42,9 @@ int main() {
                 menuLogicoEmpleados();
                 break;
             case 6:
+                menuLogicoCompras();
+                break;
+            case 7:
                 cout << endl << "Saliendo...\n";
                 return 0;
 
