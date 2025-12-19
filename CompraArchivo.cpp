@@ -26,7 +26,7 @@ int CompraArchivo::altaCompra() {
     Compra c;
     c.cargar(idProveedor, idEmpleado, 0);
 
-    int idCompra = c.getIdCompra();
+    int idCompra = getProximoId();
 
     float total = archDet.altaDetalle(idCompra);
     if (total <= 0) return -3;
@@ -41,6 +41,16 @@ int CompraArchivo::altaCompra() {
     return 0;
 }
 
+int CompraArchivo::getProximoId() {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return 1;
+
+    fseek(p, 0, SEEK_END);
+    int cant = ftell(p) / sizeof(Compra);
+    fclose(p);
+
+    return cant + 1;
+}
 
 bool CompraArchivo::agregarRegistro(Compra reg) {
     FILE* p = fopen(_nombreArchivo, "ab");
