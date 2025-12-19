@@ -52,6 +52,7 @@ float DetalleVentaArchivo::altaDetalle(int idVenta) {
         if (guardo == 1) {
             cout << "Guardado con exito.\n";
             total += detalle.getSubtotal();
+            stockArch.restarStock(idProducto, cantidad);
         } else {
             cout << "Error al guardar el detalle.\n";
         }
