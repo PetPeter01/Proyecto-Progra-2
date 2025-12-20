@@ -13,7 +13,7 @@ public:
         strcpy(_nombreArchivo, nombreArchivo);
         tamanioRegistro = sizeof(DetalleVenta);
     }
-
+    int getProximoId();
     float altaDetalle(int idVenta, Fecha fechaCompra);
     int agregarRegistro(DetalleVenta reg);
     int  listarPorVenta(int idVenta);

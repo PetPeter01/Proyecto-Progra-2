@@ -27,8 +27,8 @@ float DetalleVentaArchivo::altaDetalle(int idVenta, Fecha fechaVenta) {
             system("pause");
             continue;
         }
-
-        int cantidad = detalle.cargar(idVenta, idProducto);
+        int idDetalle = getProximoId();
+        int cantidad = detalle.cargar(idDetalle, idVenta, idProducto);
 
         StockArchivo stockArch;
         int stockDisponible = stockArch.getStock(idProducto);
@@ -63,6 +63,17 @@ float DetalleVentaArchivo::altaDetalle(int idVenta, Fecha fechaVenta) {
     }
 
     return total;
+}
+
+int DetalleVentaArchivo::getProximoId() {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return 1;
+
+    fseek(p, 0, SEEK_END);
+    int cant = ftell(p) / sizeof(DetalleVenta);
+    fclose(p);
+
+    return cant + 1;
 }
 
 int DetalleVentaArchivo::agregarRegistro(DetalleVenta reg) {

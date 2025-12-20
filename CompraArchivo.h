@@ -17,6 +17,7 @@ public:
     int getProximoId();
     bool  agregarRegistro(Compra reg);
     Compra leerRegistro(int pos);
+    int modificarRegistro(Compra reg, int pos);
     int   contarRegistros();
     bool  listarRegistros();
     int   generarIdCompra();

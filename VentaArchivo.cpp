@@ -14,39 +14,56 @@ int VentaArchivo::altaVenta() {
     long long documento;
 
     if (tipo == 1) {
-        int dni = PedirEnteroValido("DNI: ");
-        documento = dni;
-    } else if (tipo == 2) {
+        documento = PedirEnteroValido("DNI: ");
+    }
+    else if (tipo == 2) {
         documento = PedirEnteroValidoLargo("CUIT: ");
-    } else {
+    }
+    else {
         return -1;
     }
 
-
     int posCliente = archCliente.BuscarPorDocumento(documento);
-    if (posCliente < 0) {
-        system("pause");
+    if (posCliente < 0) return -2;
+
+    Cliente c = archCliente.leerRegistro(posCliente);
+    if (!c.getEstado()) return -3;
+
+    // 🔹 generar ID
+    int idVenta = generarIdVenta();
+
+    Venta v;
+    v.cargar(idVenta, documento, 0.0f);
+
+    if (!agregarRegistro(v)) return 0;
+
+    int posVenta = contarRegistros() - 1;
+
+    float total = archDetalle.altaDetalle(idVenta, v.getFechaVenta());
+    if (total <= 0) return -4;
+
+    v.setImporteTotal(total);
+    modificarRegistro(v, posVenta);
+
+    return 1;
+}
+
+int VentaArchivo::modificarRegistro(Venta reg, int pos) {
+    FILE* pVenta = fopen(_nombreArchivo, "rb+");
+
+    if (pVenta == nullptr) {
+        return -1;
+    }
+
+    fseek(pVenta, pos * tamanioRegistro, 0);
+    int escribio = fwrite(&reg, tamanioRegistro, 1, pVenta);
+    fclose(pVenta);
+
+    if (escribio != 1) {
         return -2;
     }
 
-    Cliente c = archCliente.leerRegistro(posCliente);
-    if (!c.getEstado()) {
-        system("pause");
-        return -3;
-    }
-
-    int idVenta = generarIdVenta();
-    Venta v;
-    v.cargar(idVenta, (long long)documento, 0);
-
-    float total = archDetalle.altaDetalle(idVenta, v.getFechaVenta());
-    if (total <= 0) {
-        return -4;
-    }
-    if (agregarRegistro(v)) {
-        return 1;
-    }
-    return 0;
+    return 1;
 }
 
 bool VentaArchivo::agregarRegistro(Venta reg) {

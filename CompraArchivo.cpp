@@ -24,20 +24,41 @@ int CompraArchivo::altaCompra() {
     int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
 
     int idCompra = getProximoId();
-    Compra c;
-    c.cargar(idCompra, idProveedor, idEmpleado, 0);
 
+    Compra c;
+    c.cargar(idCompra, idProveedor, idEmpleado, 0.0f);
+
+    if (!agregarRegistro(c)) return 0;
+
+    int posCompra = contarRegistros() - 1;
 
     float total = archDet.altaDetalle(idCompra, c.getFechaCompra());
     if (total <= 0) return -3;
 
     c.setImporte(total);
+    modificarRegistro(c, posCompra);
 
-    if (agregarRegistro(c)) {
-        return 1;
+    cout << "Compra registrada correctamente.\n";
+    return 1;
+}
+
+
+int CompraArchivo::modificarRegistro(Compra reg, int pos) {
+    FILE* pCompra = fopen(_nombreArchivo, "rb+");
+
+    if (pCompra == nullptr) {
+        return -1;
     }
 
-    return 0;
+    fseek(pCompra, pos * tamanioRegistro, 0);
+    int escribio = fwrite(&reg, tamanioRegistro, 1, pCompra);
+    fclose(pCompra);
+
+    if (escribio != 1) {
+        return -2;
+    }
+
+    return 1;
 }
 
 int CompraArchivo::getProximoId() {

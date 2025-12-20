@@ -16,7 +16,6 @@ float DetalleCompraArchivo::altaDetalle(int idCompra, Fecha fechaCompra) {
 
 
     while (continuar == 1) {
-        int idDetalle = getProximoId();
         int idProducto = PedirEnteroValido("ID PRODUCTO: ");
         int posProd = archProducto.buscarPorId(idProducto);
 
@@ -32,6 +31,8 @@ float DetalleCompraArchivo::altaDetalle(int idCompra, Fecha fechaCompra) {
             system("pause");
             continue;
         }
+
+        int idDetalle = getProximoId();
 
         det.cargar(idDetalle, idCompra, idProducto);
 

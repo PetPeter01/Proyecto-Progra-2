@@ -16,6 +16,7 @@ public:
     int altaVenta();
     bool agregarRegistro(Venta reg);
     Venta leerRegistro(int pos);
+    int modificarRegistro(Venta reg, int pos);
     int  contarRegistros();
     bool listarRegistros();
     int generarIdVenta();

@@ -3,6 +3,7 @@
 
 class DetalleVenta {
 private:
+    int _idDetalleVenta;
     int _idVenta;
     int _idProducto;
     int _cantidad;
@@ -12,11 +13,12 @@ private:
 public:
     DetalleVenta();
 
-    int cargar(int idVenta, int idProducto);
+    int cargar(int idDetalle, int idVenta, int idProducto);
     void mostrar();
     void calcularSubtotal();
 
     // getters
+    int getIdDetalle();
     int getIdVenta();
     int getIdProducto();
     int getCantidad();
@@ -24,6 +26,7 @@ public:
     float getSubtotal();
 
     // setters
+    void setIdDetalle(int idDetalle);
     void setIdVenta(int idVenta);
     void setIdProducto(int idProducto);
     bool setCantidad(int cantidad);

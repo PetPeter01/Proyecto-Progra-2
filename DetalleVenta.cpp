@@ -10,7 +10,8 @@ DetalleVenta::DetalleVenta() {
     _precioUnitario = 0;
 }
 
-int DetalleVenta::cargar(int idVenta, int idProducto){
+int DetalleVenta::cargar(int idDetalle, int idVenta, int idProducto){
+    setIdDetalle(idDetalle);
     setIdVenta(idVenta);
     setIdProducto(idProducto);
     int cant;
@@ -39,6 +40,7 @@ void DetalleVenta::calcularSubtotal() {
 }
 
 /// getters
+int DetalleVenta::getIdDetalle() { return _idDetalleVenta; }
 int DetalleVenta::getIdVenta() { return _idVenta; }
 int DetalleVenta::getIdProducto() { return _idProducto; }
 int DetalleVenta::getCantidad() { return _cantidad; }
@@ -46,6 +48,7 @@ float DetalleVenta::getPrecioUnitario() { return _precioUnitario; }
 float DetalleVenta::getSubtotal() { return _subtotal; }
 
 /// setters
+void DetalleVenta::setIdDetalle(int idDetalle){ _idDetalleVenta = idDetalle; }
 void DetalleVenta::setIdVenta(int idVenta) { _idVenta = idVenta; }
 void DetalleVenta::setIdProducto(int idProducto) { _idProducto = idProducto; }
 bool DetalleVenta::setCantidad(int cantidad) {
