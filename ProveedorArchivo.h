@@ -19,6 +19,8 @@ public:
     int  agregarRegistro(Proveedor reg);
     bool listarRegistros();
     Proveedor leerRegistro(int pos);
+    int contarRegistros();
+
     bool bajaLogica();
     int  modificarRegistro(Proveedor reg, int pos);
     int  buscarPorId(int idProveedor);

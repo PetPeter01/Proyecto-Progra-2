@@ -53,16 +53,24 @@ int ProductoArchivo::altaProducto() {
 }
 
 int ProductoArchivo::getProximoId() {
-    FILE* p = fopen(_nombreArchivo, "rb");
-    if (p == nullptr) return 1;
-
-    fseek(p, 0, SEEK_END);
-    int cant = ftell(p) / sizeof(Producto);
-    fclose(p);
-
-    return cant + 1;
+    return contarRegistros() + 1;
 }
 
+int ProductoArchivo::contarRegistros() {
+    Producto p;
+    FILE* pProd = fopen(_nombreArchivo, "rb");
+    if (pProd == nullptr) {
+        return 0;
+    }
+
+    int contador = 0;
+    while (fread(&p, tamanioRegistro, 1, pProd) == 1) {
+        contador++;
+    }
+
+    fclose(pProd);
+    return contador;
+}
 
 int ProductoArchivo::agregarRegistro(Producto reg) {
     FILE* pProd = fopen(_nombreArchivo, "ab");

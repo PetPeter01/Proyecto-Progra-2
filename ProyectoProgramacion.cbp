@@ -56,6 +56,8 @@
 		<Unit filename="Menu.h" />
 		<Unit filename="MovimientoStock.cpp" />
 		<Unit filename="MovimientoStock.h" />
+		<Unit filename="MovimientoStockArchivo.cpp" />
+		<Unit filename="MovimientoStockArchivo.h" />
 		<Unit filename="Producto.cpp" />
 		<Unit filename="Producto.h" />
 		<Unit filename="ProductoArchivo.cpp" />

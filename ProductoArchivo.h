@@ -20,7 +20,7 @@ public:
     std::string getTipoEquipoStr(Producto& p);
     bool listarRegistros();
     Producto leerRegistro(int pos);
-
+    int contarRegistros();
     bool existeProducto(const char* descripcion, const char* marca);
     bool bajaLogica();
     int modificarRegistro(Producto reg, int pos);

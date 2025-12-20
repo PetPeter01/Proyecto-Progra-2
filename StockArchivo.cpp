@@ -1,4 +1,6 @@
 #include "StockArchivo.h"
+#include "MovimientoStock.h"
+#include "MovimientoStockArchivo.h"
 #include <iostream>
 #include <cstring>
 
@@ -71,25 +73,29 @@ int StockArchivo::getStock(int id){
     return stock;
 }
 
-bool StockArchivo::sumarStock(int idProducto, int cantidad) {
+bool StockArchivo::sumarStock(int idProducto, int cantidad, Fecha fecha) {
     int pos = buscarPorIdProducto(idProducto);
 
     if (pos >= 0) {
         Stock reg = leerRegistro(pos);
         reg.setCantidad(reg.getCantidad() + cantidad);
-        return modificarRegistro(reg, pos);
+        modificarRegistro(reg, pos);
     }
     else {
         Stock nuevo;
         nuevo.setIdProducto(idProducto);
         nuevo.setCantidad(cantidad);
-
-        return agregarRegistro(nuevo);
+        agregarRegistro(nuevo);
     }
+
+    MovimientoStock mov;
+    MovimientoStockArchivo movArch;
+    mov.cargar(idProducto, cantidad, "COMPRA", fecha);
+    movArch.agregarRegistro(mov);
+    return true;
 }
 
-
-bool StockArchivo::restarStock(int idProducto, int cantidad) {
+bool StockArchivo::restarStock(int idProducto, int cantidad, Fecha fecha) {
     int pos = buscarPorIdProducto(idProducto);
     if (pos < 0){
         return false;
@@ -99,8 +105,13 @@ bool StockArchivo::restarStock(int idProducto, int cantidad) {
     if (reg.getCantidad() < cantidad) return false;
 
     reg.setCantidad(reg.getCantidad() - cantidad);
+    modificarRegistro(reg, pos);
 
-    return modificarRegistro(reg, pos);
+    MovimientoStock mov;
+    MovimientoStockArchivo movArch;
+    mov.cargar(idProducto, cantidad, "VENTA", fecha);
+    movArch.agregarRegistro(mov);
+    return true;
 }
 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Stock.h"
+#include "Fecha.h"
 
 class StockArchivo {
 private:
@@ -15,8 +16,8 @@ public:
     int modificarRegistro(Stock reg, int pos);
 
     int getStock(int idProducto);
-    bool sumarStock(int idProducto, int cantidad);
-    bool restarStock(int idProducto, int cantidad);
+    bool sumarStock(int idProducto, int cantidad, Fecha fecha);
+    bool restarStock(int idProducto, int cantidad, Fecha fecha);
 };
 
 

@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     TiposDeEquipoArchivo archTipos;
-    archTipos.inicializarSiNoExiste();
+    archTipos.inicializar10PorDefecto();
 
     int opcion = 0;
     rlutil::setBackgroundColor(rlutil::BLUE);
@@ -45,6 +45,9 @@ int main() {
                 menuLogicoCompras();
                 break;
             case 7:
+                menuLogicoMovimientoStock();
+                break;
+            case 8:
                 cout << endl << "Saliendo...\n";
                 return 0;
 

@@ -15,8 +15,8 @@ Compra::Compra() {
     _estado      = false;
 }
 
-void Compra::cargar(int idProveedor, int idEmpleado, float importe) {
-    setIdCompra(ultimoId++);
+void Compra::cargar(int idCompra, int idProveedor, int idEmpleado, float importe) {
+    setIdCompra(idCompra);
     setIdProveedor(idProveedor);
     setIdEmpleado(idEmpleado);
     setImporte(importe);

@@ -88,20 +88,6 @@ bool TiposDeEquipoArchivo::listarActivos() {
 
 //  CREA 10 TIPOS YA CARGADOS
 
-void TiposDeEquipoArchivo::inicializarSiNoExiste() {
-    FILE* p = fopen(_nombreArchivo, "rb");
-    if (p != nullptr) {
-        fseek(p, 0, SEEK_END);
-        if (ftell(p) > 0) {
-            fclose(p);
-            return;
-        }
-        fclose(p);
-    }
-
-    inicializar10PorDefecto();
-}
-
 
 void TiposDeEquipoArchivo::inicializar10PorDefecto() {
     FILE* p = fopen(_nombreArchivo, "rb");
@@ -113,8 +99,6 @@ void TiposDeEquipoArchivo::inicializar10PorDefecto() {
     }
 
     TiposDeEquipo t;
-
-
 
     t.setIdTiposDeEquipo(1);  t.setDescripcion("PC");               t.setEstado(true); agregarRegistro(t);
     t.setIdTiposDeEquipo(2);  t.setDescripcion("PORTATIL");         t.setEstado(true); agregarRegistro(t);

@@ -23,14 +23,23 @@ int ProveedorArchivo::altaProveedor() {
 }
 
 int ProveedorArchivo::getProximoId() {
-    FILE* p = fopen(_nombreArchivo, "rb");
-    if (p == nullptr) return 1;
+    return contarRegistros() + 1;
+}
 
-    fseek(p, 0, SEEK_END);
-    int cant = ftell(p) / sizeof(Proveedor);
-    fclose(p);
+int ProveedorArchivo::contarRegistros() {
+    Proveedor p;
+    FILE* pProvee = fopen(_nombreArchivo, "rb");
+    if (pProvee == nullptr) {
+        return 0;
+    }
 
-    return cant + 1;
+    int contador = 0;
+    while (fread(&p, tamanioRegistro, 1, pProvee) == 1) {
+        contador++;
+    }
+
+    fclose(pProvee);
+    return contador;
 }
 
 

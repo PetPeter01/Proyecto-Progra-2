@@ -16,7 +16,7 @@ private:
 public:
     Compra();
 
-    void cargar(int idProveedor, int idEmpleado, float importe);
+    void cargar(int idCompra, int idProveedor, int idEmpleado, float importe);
     void mostrar();
 
     // Getters
