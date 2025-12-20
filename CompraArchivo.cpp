@@ -23,18 +23,17 @@ int CompraArchivo::altaCompra() {
 
     int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
 
-    Compra c;
-    c.cargar(idProveedor, idEmpleado, 0);
-
     int idCompra = getProximoId();
+    Compra c;
+    c.cargar(idCompra, idProveedor, idEmpleado, 0);
 
-    float total = archDet.altaDetalle(idCompra);
+
+    float total = archDet.altaDetalle(idCompra, c.getFechaCompra());
     if (total <= 0) return -3;
 
     c.setImporte(total);
 
     if (agregarRegistro(c)) {
-        cout << "Compra registrada correctamente.\n";
         return 1;
     }
 

@@ -6,7 +6,7 @@
 #include "FuncionesGenerales.h"
 using namespace std;
 
-float DetalleVentaArchivo::altaDetalle(int idVenta) {
+float DetalleVentaArchivo::altaDetalle(int idVenta, Fecha fechaVenta) {
     ProductoArchivo archProducto;
     DetalleVenta detalle;
     float total = 0.0f;
@@ -52,7 +52,7 @@ float DetalleVentaArchivo::altaDetalle(int idVenta) {
         if (guardo == 1) {
             cout << "Guardado con exito.\n";
             total += detalle.getSubtotal();
-            stockArch.restarStock(idProducto, cantidad);
+            stockArch.restarStock(idProducto, cantidad, fechaVenta);
         } else {
             cout << "Error al guardar el detalle.\n";
         }

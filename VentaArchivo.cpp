@@ -19,39 +19,33 @@ int VentaArchivo::altaVenta() {
     } else if (tipo == 2) {
         documento = PedirEnteroValidoLargo("CUIT: ");
     } else {
-        cout << "Opción inválida.\n";
         return -1;
     }
 
 
     int posCliente = archCliente.BuscarPorDocumento(documento);
     if (posCliente < 0) {
-        cout << "CLIENTE NO ENCONTRADO.\n";
         system("pause");
         return -2;
     }
 
     Cliente c = archCliente.leerRegistro(posCliente);
     if (!c.getEstado()) {
-        cout << "CLIENTE DADO DE BAJA.\n";
         system("pause");
         return -3;
     }
 
     int idVenta = generarIdVenta();
-    float total = archDetalle.altaDetalle(idVenta);
+    Venta v;
+    v.cargar(idVenta, (long long)documento, 0);
+
+    float total = archDetalle.altaDetalle(idVenta, v.getFechaVenta());
     if (total <= 0) {
-        cout << "No se pudo registrar detalle o venta vacía.\n";
         return -4;
     }
-
-    Venta v;
-    v.cargar(idVenta, (long long)documento, total);
     if (agregarRegistro(v)) {
-        cout << "Venta registrada correctamente.\n";
         return 1;
     }
-    cout << "Error al guardar venta.\n";
     return 0;
 }
 

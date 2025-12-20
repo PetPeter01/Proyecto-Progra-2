@@ -1,6 +1,7 @@
 #pragma once
 #include <cstring>
 #include "DetalleCompra.h"
+#include "Fecha.h"
 
 class DetalleCompraArchivo {
 private:
@@ -13,7 +14,7 @@ public:
         tamanioRegistro = sizeof(DetalleCompra);
     }
 
-    float altaDetalle(int idCompra);
+    float altaDetalle(int idCompra, Fecha fecha);
     int getProximoId();
     int   agregarRegistro(DetalleCompra reg);
     int   listarPorCompra(int idCompra);

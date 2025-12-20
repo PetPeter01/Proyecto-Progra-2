@@ -7,16 +7,16 @@
 
 using namespace std;
 
-float DetalleCompraArchivo::altaDetalle(int idCompra) {
+float DetalleCompraArchivo::altaDetalle(int idCompra, Fecha fechaCompra) {
     ProductoArchivo archProducto;
     StockArchivo stockArch;
     DetalleCompra   det;
     float total = 0.0f;
     int   continuar = 1;
 
-    int id = getProximoId();
 
     while (continuar == 1) {
+        int idDetalle = getProximoId();
         int idProducto = PedirEnteroValido("ID PRODUCTO: ");
         int posProd = archProducto.buscarPorId(idProducto);
 
@@ -33,13 +33,13 @@ float DetalleCompraArchivo::altaDetalle(int idCompra) {
             continue;
         }
 
-        det.cargar(id, idCompra, idProducto);
+        det.cargar(idDetalle, idCompra, idProducto);
 
         int guardo = agregarRegistro(det);
         if (guardo == 1) {
             cout << "Detalle de compra guardado con exito.\n";
             total += det.getCantidad() * det.getCostoUnitario();
-            stockArch.sumarStock(idProducto, det.getCantidad());
+            stockArch.sumarStock(idProducto, det.getCantidad(), fechaCompra);
         } else {
             cout << "Error al guardar el detalle de compra.\n";
         }
