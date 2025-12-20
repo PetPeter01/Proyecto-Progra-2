@@ -12,7 +12,7 @@ strcpy(_Telefono,"");
 strcpy(_Cargo,"");
 _Estado=true;
 }
-    void Empleado::Cargar(int id){
+void Empleado::Cargar(int id){
     char nombre[30], apellido[30], dni[15], telefono[20], cargo[30];
     setIdEmpleado(id);
     cout << "INGRESE EL NOMBRE O LOS NOMBRES DEL EMPLEADO: " << endl;
@@ -24,20 +24,20 @@ _Estado=true;
 
     int Opcion;
     while(true){
-       cout << "INGRESE EL CARGO DEL EMPLEADO" << endl;
+        cout << "INGRESE EL CARGO DEL EMPLEADO" << endl;
         cout << "1) RESPONSABLE DE COMPRAS" << endl;
         cout << "2) RESPONSABLE DE VENTAS" << endl;
         cout << "3) OTRO TIPO" << endl;
         cout << "SELECCIONE UNA OPCION" << endl;
         cin >> Opcion;
-    if(Opcion==1){
-      setCargo("RESPONSABLE DE COMPRAS");
-      break;
-    }
-    else if(Opcion==2){
-        setCargo("RESPONSABLE DE VENTAS");
-        break;
-    }
+
+        if(Opcion==1){
+              setCargo("RESPONSABLE DE COMPRAS");
+              break;
+        } else if(Opcion==2){
+            setCargo("RESPONSABLE DE VENTAS");
+            break;
+        }
     else if(Opcion==3){
         setCargo("OTRO TIPO");
         break;
@@ -46,15 +46,16 @@ _Estado=true;
         cout << "OPCION INVALIDA INTENTE NUEVAMENTE" << endl;
     }
     }
-cin.ignore();
-    cout << "INGRESE EL DNI DEL EMPLEADO: " << endl;
-    cin.getline(dni,15);
-    setDni(dni);
-    cout << "INGRESE EL TELEFONO DEL EMPLEADO:" << endl;
-    cin.getline(telefono,20);
-    setTelefono(telefono);
-    }
-    void Empleado::Mostrar(){
+    cin.ignore();
+        cout << "INGRESE EL DNI DEL EMPLEADO: " << endl;
+        cin.getline(dni,15);
+        setDni(dni);
+        cout << "INGRESE EL TELEFONO DEL EMPLEADO:" << endl;
+        cin.getline(telefono,20);
+        setTelefono(telefono);
+}
+
+void Empleado::Mostrar(){
     cout << "ID Empleado: " << _IdEmpleado << "\n";
     cout << "Nombre: " << _Nombre << "\n";
     cout << "Apellido: " << _Apellido << "\n";
@@ -64,11 +65,7 @@ cin.ignore();
     cout << "Estado: " << (_Estado ? "Activo" : "Eliminado") << "\n";
     cout << "--------------------------------\n";
 
-    }
-
-
-
-
+}
 
 void Empleado::setIdEmpleado(int IdEmpleado){ _IdEmpleado = IdEmpleado; }
 
