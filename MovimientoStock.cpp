@@ -13,13 +13,11 @@ MovimientoStock::MovimientoStock() {
     _estado = true;
 }
 
-void MovimientoStock::cargar(int idProducto, int cantidad, char* tipo) {
+void MovimientoStock::cargar(int idProducto, int cantidad, const char* tipo, Fecha fecha) {
     setIdProducto(idProducto);
     setCantidad(cantidad);
     setTipoMovimiento(tipo);
 
-    Fecha fecha;
-    fecha.cargar();
     setFecha(fecha);
 
     _estado = true;
@@ -29,8 +27,9 @@ void MovimientoStock::mostrar() {
     cout << "ID Movimiento: " << _idMovimiento << endl;
     cout << "ID Producto: " << _idProducto << endl;
     cout << "Cantidad: " << _cantidad << endl;
-    cout << "Tipo: " << _tipoMovimiento << endl;
+    cout << "Tipo: " << getTipoMovimiento() << endl;
     cout << "Fecha: " << _fecha.toString() << endl;
+    cout << "--------------------------\n";
 }
 
 // Getters
@@ -55,7 +54,7 @@ bool MovimientoStock::setCantidad(int cantidad) {
 
 void MovimientoStock::setFecha(Fecha fecha) { _fecha = fecha; }
 
-void MovimientoStock::setTipoMovimiento(char* tipo) {
+void MovimientoStock::setTipoMovimiento(const char* tipo) {
     if (strcmp(tipo, "COMPRA") == 0 || strcmp(tipo, "VENTA") == 0) {
         strcpy(_tipoMovimiento, tipo);
     }
