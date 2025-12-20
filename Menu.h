@@ -5,6 +5,8 @@ using namespace std;
 int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar);
 
 int mostrarMenuPrincipal();
+int mostrarDatosBase();
+int mostrarOperaciones();
 int mostrarMenuCliente();
 int mostrarMenuProductos();
 int mostrarMenuTiposEquipo();
@@ -14,6 +16,9 @@ int mostrarMenuCompras();
 int mostrarMenuEmpleados();
 int mostrarMenuMovimientoStock();
 
+
+int menuLogicoDatosBase();
+int menuLogicoOperaciones();
 int menuLogicoEmpleados();
 int menuLogicoTiposEquipo();
 int menuLogicoCliente();

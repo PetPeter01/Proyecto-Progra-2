@@ -43,21 +43,79 @@ int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar) {
 // MENUS VISUALES
 int mostrarMenuPrincipal() {
     int y = 0;
-    const int cantidadOpciones = 9;
+    const int cantidadOpciones = 3;
     bool seleccionar = false;
     int yAnterior = -1;
 
     rlutil::cls();
     rlutil::locate(50, 10); cout << "--- MENU PRINCIPAL ---";
-    rlutil::locate(55, 11); cout << "MENU CLIENTE";
-    rlutil::locate(55, 12); cout << "MENU PRODUCTOS";
-    rlutil::locate(55, 13); cout << "MENU VENTAS";
-    rlutil::locate(55, 14); cout << "MENU PROVEEDORES";
-    rlutil::locate(55, 15); cout << "MENU TIPOS DE EQUIPO";
-    rlutil::locate(55, 16); cout << "MENU EMPLEADOS";
-    rlutil::locate(55, 17); cout << "MENU COMPRAS";
-    rlutil::locate(55, 18); cout << "MENU MOVIMIENTO DE STOCK";
-    rlutil::locate(55, 19); cout << "SALIR";
+    rlutil::locate(55, 11); cout << "DATOS BASE";
+    rlutil::locate(55, 12); cout << "OPERACIONES";
+    rlutil::locate(55, 13); cout << "SALIR";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
+int mostrarDatosBase(){
+    int y = 0;
+    const int cantidadOpciones = 6;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- DATOS BASE ---";
+    rlutil::locate(55, 11); cout << "CLIENTES";
+    rlutil::locate(55, 12); cout << "PRODUCTOS";
+    rlutil::locate(55, 13); cout << "PROVEEDORES";
+    rlutil::locate(55, 14); cout << "EMPLEADOS";
+    rlutil::locate(55, 15); cout << "TIPOS DE EQUIPO";
+    rlutil::locate(55, 16); cout << "ATRAS";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
+int mostrarOperaciones(){
+    int y = 0;
+    const int cantidadOpciones = 4;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- OPERACIONES ---";
+    rlutil::locate(55, 11); cout << "VENTAS";
+    rlutil::locate(55, 12); cout << "COMPRAS";
+    rlutil::locate(55, 13); cout << "MOVIMIENTO DE STOCK";
+    rlutil::locate(55, 14); cout << "ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -90,7 +148,7 @@ int mostrarMenuCliente() {
     rlutil::locate(55, 13); cout << " REACTIVAR CLIENTE";
     rlutil::locate(55, 14); cout << " VER CLIENTES";
     rlutil::locate(55, 15); cout << " BUSCAR CLIENTE";
-    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 16); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -121,7 +179,7 @@ int mostrarMenuProductos() {
     rlutil::locate(55, 11); cout << " AGREGAR PRODUCTO";
     rlutil::locate(55, 12); cout << " BORRAR PRODUCTO";
     rlutil::locate(55, 13); cout << " VER PRODUCTOS";
-    rlutil::locate(55, 14); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 14); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -156,7 +214,7 @@ int mostrarMenuVentas() {
     rlutil::locate(55, 15); cout << " MAYOR IMPORTE POR ANIO";
     rlutil::locate(55, 16); cout << " RECAUDACION ANUAL";
     rlutil::locate(55, 17); cout << " RECAUDACION POR CLIENTE";
-    rlutil::locate(55, 18); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 18); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -187,7 +245,7 @@ int mostrarMenuProveedores() {
     rlutil::locate(55, 13); cout << " BAJA LOGICA";
     rlutil::locate(55, 14); cout << " REACTIVAR PROVEEDOR";
     rlutil::locate(55, 15); cout << " BUSCAR POR NOMBRE";
-    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 16); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -218,7 +276,7 @@ int mostrarMenuTiposEquipo() {
     rlutil::locate(55, 11); cout << " VER TODOS";
     rlutil::locate(55, 12); cout << " VER SOLO ACTIVOS";
     rlutil::locate(55, 13); cout << " ACTIVAR / DESACTIVAR";
-    rlutil::locate(55, 14); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 14); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -282,7 +340,7 @@ int mostrarMenuCompras() {
     rlutil::locate(55, 13); cout << " LISTAR COMPRAS";
     rlutil::locate(55, 14); cout << " GASTO ANUAL";
     rlutil::locate(55, 15); cout << " LISTAR COMPRAS POR EMPLEADO";
-    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 16); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -311,7 +369,7 @@ int mostrarMenuMovimientoStock(){
     rlutil::locate(55, 11); cout << " HISTORIAL";
     rlutil::locate(55, 12); cout << " ELIMINAR MOVIMIENTO";
     rlutil::locate(55, 13); cout << " BUSCAR POR ID";
-    rlutil::locate(55, 14); cout << " VOLVER AL MENU PRINCIPAL";
+    rlutil::locate(55, 14); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -362,6 +420,86 @@ long long ValidarDocumentoSegunTipo(int tipo) {
 }
 
 // MENUS LOGICOS
+
+int menuLogicoDatosBase(){
+    rlutil::showcursor();
+    int opcion;
+
+    do {
+        opcion = mostrarDatosBase();
+
+        switch (opcion) {
+            case 0:
+                menuLogicoCliente();
+                system("pause");
+                break;
+
+            case 1:
+                menuLogicoProductos();
+                system("pause");
+                break;
+
+            case 2:
+                menuLogicoProveedores();
+                system("pause");
+                break;
+
+            case 3:
+                menuLogicoEmpleados();
+                break;
+            case 4:
+                menuLogicoTiposEquipo();
+                break;
+            case 5:
+                cout << endl << "Volviendo...\n";
+                return 0;
+
+            default:
+                cout << "Opcion invalida. Intente de nuevo.\n";
+                system("pause");
+                break;
+        }
+
+    } while (opcion != 5);
+    return 0;
+}
+
+int menuLogicoOperaciones(){
+    rlutil::showcursor();
+    int opcion;
+
+    do {
+        opcion = mostrarOperaciones();
+
+        switch (opcion) {
+            case 0:
+                menuLogicoVentas();
+                system("pause");
+                break;
+
+            case 1:
+                menuLogicoCompras();
+                system("pause");
+                break;
+
+            case 2:
+                menuLogicoMovimientoStock();
+                system("pause");
+                break;
+            case 3:
+                cout << endl << " Volviendo...\n";
+                return 0;
+
+            default:
+                cout << "Opcion invalida. Intente de nuevo.\n";
+                system("pause");
+                break;
+        }
+
+    } while (opcion != 3);
+    return 0;
+}
+
 int menuLogicoMovimientoStock(){
     rlutil::showcursor();
     int opcion;
@@ -399,6 +537,7 @@ int menuLogicoMovimientoStock(){
     } while(opcion!=3);
     return 0;
 }
+
 int menuLogicoCliente() {
     rlutil::showcursor();
     int opcion;
@@ -524,7 +663,7 @@ int menuLogicoCliente() {
 
             }
             case 5:
-                cout << "Volviendo al menu principal...\n";
+                cout << "Volviendo...\n";
                 break;
             default:
                 cout << "Opcion invalida\n";
@@ -568,7 +707,7 @@ int menuLogicoProductos(){
                 break;
             }
             case 3:  // VOLVER
-                cout << "Volviendo al menu principal...\n";
+                cout << "Volviendo...\n";
                 break;
             default:
                 cout << "Opcion invalida\n";
@@ -683,7 +822,7 @@ int menuLogicoVentas() {
                 break;
             }
             case 7:
-                cout << "Volviendo al menu principal...\n";
+                cout << "Volviendo...\n";
                 break;
             default:
                 cout << "Opcion invalida\n";
@@ -766,7 +905,7 @@ int menuLogicoCompras() {
                 break;
             }
             case 5:
-                cout << "Volviendo al menu principal...\n";
+                cout << "Volviendo...\n";
                 break;
         }
 
@@ -846,6 +985,7 @@ int menuLogicoProveedores() {
             break;
         }
         case 5:
+            cout << "Volviendo...\n";
             break;
         }
     } while (opcion != 5);
@@ -913,6 +1053,7 @@ int menuLogicoTiposEquipo() {
                 break;
             }
             case 3:
+                cout << "Volviendo...\n";
                 break;
         }
 
@@ -965,6 +1106,7 @@ int menuLogicoEmpleados() {
                 break;
             }
             case 5:
+                cout << "Volviendo...\n";
                 break;
             default:
                 cout << "Opcion invalida\n";

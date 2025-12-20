@@ -17,47 +17,20 @@ int main() {
 
         switch (opcion) {
             case 0:
-                menuLogicoCliente();
-                system("pause");
+                menuLogicoDatosBase();
                 break;
-
             case 1:
-                menuLogicoProductos();
-                system("pause");
+                menuLogicoOperaciones();
                 break;
-
             case 2:
-                menuLogicoVentas();
-                break;
-
-            case 3:
-                menuLogicoProveedores();
-                break;
-
-            case 4:
-                menuLogicoTiposEquipo();
-                system("pause");
-                break;
-            case 5:
-                menuLogicoEmpleados();
-                break;
-            case 6:
-                menuLogicoCompras();
-                break;
-            case 7:
-                menuLogicoMovimientoStock();
-                break;
-            case 8:
                 cout << endl << "Saliendo...\n";
                 return 0;
-
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
-                system("pause");
                 break;
         }
 
-    } while (opcion != 5);
+    } while (opcion != 2);
 
     return 0;
 }
