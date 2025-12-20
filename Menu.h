@@ -12,6 +12,7 @@ int mostrarMenuVentas();
 int mostrarMenuProveedores();
 int mostrarMenuCompras();
 int mostrarMenuEmpleados();
+int mostrarMenuMovimientoStock();
 
 int menuLogicoEmpleados();
 int menuLogicoTiposEquipo();
@@ -20,6 +21,7 @@ int menuLogicoProductos();
 int menuLogicoVentas();
 int menuLogicoProveedores();
 int menuLogicoCompras();
+int menuLogicoMovimientoStock();
 
 long long ValidarDocumentoSegunTipo(int tipo);
 

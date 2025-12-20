@@ -13,6 +13,8 @@
 #include "Empleado.h"
 #include "EmpleadoArchivo.h"
 #include "CompraArchivo.h"
+#include "MovimientoStock.h"
+#include "MovimientoStockArchivo.h"
 
 using namespace std;
 
@@ -41,7 +43,7 @@ int flechaSeleccion(int y, int cantidadOpciones, bool &seleccionar) {
 // MENUS VISUALES
 int mostrarMenuPrincipal() {
     int y = 0;
-    const int cantidadOpciones = 8;
+    const int cantidadOpciones = 9;
     bool seleccionar = false;
     int yAnterior = -1;
 
@@ -54,7 +56,8 @@ int mostrarMenuPrincipal() {
     rlutil::locate(55, 15); cout << "MENU TIPOS DE EQUIPO";
     rlutil::locate(55, 16); cout << "MENU EMPLEADOS";
     rlutil::locate(55, 17); cout << "MENU COMPRAS";
-    rlutil::locate(55, 18); cout << "SALIR";
+    rlutil::locate(55, 18); cout << "MENU MOVIMIENTO DE STOCK";
+    rlutil::locate(55, 19); cout << "SALIR";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -233,6 +236,39 @@ int mostrarMenuTiposEquipo() {
     return y;
 }
 
+int mostrarMenuEmpleados() {
+    int y = 0;
+    const int cantidadOpciones = 6;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- MENU EMPLEADOS ---";
+    rlutil::locate(55, 11); cout << " ALTA EMPLEADO";
+    rlutil::locate(55, 12); cout << " BAJA LOGICA EMPLEADO";
+    rlutil::locate(55, 13); cout << " REACTIVAR EMPLEADO";
+    rlutil::locate(55, 14); cout << " LISTAR EMPLEADOS ACTIVOS";
+    rlutil::locate(55, 15); cout << " LISTAR TODOS LOS EMPLEADOS";
+    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
 int mostrarMenuCompras() {
     int y = 0;
     const int cantidadOpciones = 6;
@@ -247,6 +283,35 @@ int mostrarMenuCompras() {
     rlutil::locate(55, 14); cout << " GASTO ANUAL";
     rlutil::locate(55, 15); cout << " LISTAR COMPRAS POR EMPLEADO";
     rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
+
+    while (!seleccionar) {
+        if (y != yAnterior) {
+            if (yAnterior != -1) {
+                rlutil::locate(53, 11 + yAnterior);
+                cout << " ";
+            }
+            rlutil::locate(53, 11 + y);
+            cout << (char)175;
+            yAnterior = y;
+        }
+        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
+    }
+
+    return y;
+}
+
+int mostrarMenuMovimientoStock(){
+    int y = 0;
+    const int cantidadOpciones = 5;
+    bool seleccionar = false;
+    int yAnterior = -1;
+
+    rlutil::cls();
+    rlutil::locate(50, 10); cout << "--- MENU MOVIMIENTO STOCK ---";
+    rlutil::locate(55, 11); cout << " HISTORIAL";
+    rlutil::locate(55, 12); cout << " ELIMINAR MOVIMIENTO";
+    rlutil::locate(55, 13); cout << " BUSCAR POR ID";
+    rlutil::locate(55, 14); cout << " VOLVER AL MENU PRINCIPAL";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -297,6 +362,43 @@ long long ValidarDocumentoSegunTipo(int tipo) {
 }
 
 // MENUS LOGICOS
+int menuLogicoMovimientoStock(){
+    rlutil::showcursor();
+    int opcion;
+    MovimientoStockArchivo msA;
+    MovimientoStock ms;
+    do {
+        opcion = mostrarMenuMovimientoStock();
+        switch(opcion){
+            case 0: {
+                system("cls");
+                cout << "HISTORIAL: MOVIMIENTO DE STOCK \n";
+                cout << "--------------------------\n";
+                msA.listarRegistros();
+                system("pause");
+                break;
+            }
+            case 1: {
+                system("cls");
+                cout << "ELIMINAR MOVIMIENTO \n";
+                cout << "--------------------------\n";
+                msA.bajaLogica();
+            }
+            case 2:
+                system("cls");
+                cout << "BUSCAR POR ID \n";
+                cout << "--------------------------\n";
+                int id = PedirEnteroValido("ID: ");
+                int pos = msA.buscarPorId(id);
+                if(pos>=0){
+                    MovimientoStock encontrado = msA.leerRegistro(pos);
+                    encontrado.mostrar();
+                    system("pause");
+                }
+        }
+    } while(opcion!=3);
+    return 0;
+}
 int menuLogicoCliente() {
     rlutil::showcursor();
     int opcion;
@@ -489,7 +591,15 @@ int menuLogicoVentas() {
                 system("cls");
                 cout << "Agregar Venta...\n";
                 cout << "--------------------------\n";
-                pV.altaVenta();
+                int resultado = pV.altaVenta();
+                switch(resultado){
+                    case 1:  cout << "Compra registrada correctamente"; break;
+                    case 0:  cout << "ERROR AL GUARDAR VENTA"; break;
+                    case -1: cout << "ERROR: OPCION INVALIDA"; break;
+                    case -2: cout << "ERROR: CLIENTE NO ENCONTRADO."; break;
+                    case -3: cout << "ERROR: CLIENTE DADO DE BAJA"; break;
+                    case -4: cout << "ERROR: NO SE PUDO REGISTRAR EL DETALLE O VENTA VACIA"; break;
+                }
                 system("pause");
                 break;
             }
@@ -596,7 +706,14 @@ int menuLogicoCompras() {
                 system("cls");
                 cout << "Agregar compra...\n";
                 cout << "--------------------------\n";
-                cArch.altaCompra();
+                int resultado = cArch.altaCompra();
+                switch(resultado){
+                    case 0: cout << "ERROR DESCONOCIDO"; break;
+                    case 1: cout << "Compra registrada correctamente"; break;
+                    case -1: cout << "ERROR: PROVEEDOR NO REGISTRADO"; break;
+                    case -2: cout << "ERROR: PROVEEDOR INACTIVO"; break;
+                    case -3: cout << "ERROR: ERROR AL CARGAR DETALLE"; break;
+                }
                 system("pause");
                 break;
             }
@@ -657,8 +774,6 @@ int menuLogicoCompras() {
 
     return 0;
 }
-
-
 
 int menuLogicoProveedores() {
     rlutil::showcursor();
@@ -804,39 +919,6 @@ int menuLogicoTiposEquipo() {
     } while (opcion != 3);
 
     return 0;
-}
-
-int mostrarMenuEmpleados() {
-    int y = 0;
-    const int cantidadOpciones = 6;
-    bool seleccionar = false;
-    int yAnterior = -1;
-
-    rlutil::cls();
-    rlutil::locate(50, 10); cout << "--- MENU EMPLEADOS ---";
-    rlutil::locate(55, 11); cout << " ALTA EMPLEADO";
-    rlutil::locate(55, 12); cout << " BAJA LOGICA EMPLEADO";
-    rlutil::locate(55, 13); cout << " REACTIVAR EMPLEADO";
-    rlutil::locate(55, 14); cout << " LISTAR EMPLEADOS ACTIVOS";
-    rlutil::locate(55, 15); cout << " LISTAR TODOS LOS EMPLEADOS";
-    rlutil::locate(55, 16); cout << " VOLVER AL MENU PRINCIPAL";
-
-    while (!seleccionar) {
-        if (y != yAnterior) {
-
-            if (yAnterior != -1) {
-                rlutil::locate(53, 11 + yAnterior);
-                cout << " ";
-            }
-
-            rlutil::locate(53, 11 + y);
-            cout << (char)175;
-            yAnterior = y;
-        }
-        y = flechaSeleccion(y, cantidadOpciones, seleccionar);
-    }
-
-    return y;
 }
 
 int menuLogicoEmpleados() {
