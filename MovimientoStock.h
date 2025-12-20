@@ -14,7 +14,7 @@ private:
 public:
     MovimientoStock();
 
-    void cargar(int idProducto, int cantidad, char* tipo);
+    void cargar(int idProducto, int cantidad, const char* tipo, Fecha fecha);
     void mostrar();
 
     int getIdMovimiento();
@@ -28,7 +28,7 @@ public:
     void setIdProducto(int idProducto);
     bool setCantidad(int cantidad);
     void setFecha(Fecha fecha);
-    void setTipoMovimiento(char* tipo);
+    void setTipoMovimiento(const char* tipo);
     void setEstado(bool estado);
 
     int getFactorMovimiento();
