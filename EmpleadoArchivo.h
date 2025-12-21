@@ -19,7 +19,7 @@ public:
     int GenerarProximoId();
     int BuscarPorId(int idBuscado);
     bool modificarRegistro(Empleado reg, int pos);
-    bool altaEmpleado();
+    int altaEmpleado(int dni);
     void listarEmpleados();
     bool bajaLogica(int id);
     bool reactivarEmpleado(int id);

@@ -82,14 +82,27 @@ int EmpleadoArchivo::GenerarProximoId(){
     return contarRegistros() + 1;
 }
 
-bool EmpleadoArchivo::altaEmpleado(){
+int EmpleadoArchivo::altaEmpleado(int dni){
     Empleado reg;
     int id = GenerarProximoId();
-    reg.Cargar(id);
-    reg.SetEstado(true);
 
-    return agregarRegistro(reg);
+    int pos = BuscarPorDni(dni);
+    if (pos < 0) {
+        reg.Cargar(id, dni);
+        reg.SetEstado(true);
+        return agregarRegistro(reg) == 1 ? 1 : -1;
+    }
+
+    Empleado existente = leerRegistro(pos);
+    if (!existente.GetEstado()) {
+        existente.SetEstado(true);
+        modificarRegistro(existente, pos);
+        return 2;
+    }
+
+    return 0;
 }
+
 
 void EmpleadoArchivo::listarEmpleados(){
     int CantidadRegistros=contarRegistros();
