@@ -2,17 +2,18 @@
 #include "Venta.h"
 #include "cliente.h"
 #include "ClienteArchivo.h"
+#include "EmpleadoArchivo.h"
 #include "DetalleVentaArchivo.h"
 #include "FuncionesGenerales.h"
 #include <iostream>
 
 int VentaArchivo::altaVenta() {
+    EmpleadoArchivo archEmp;
     ClienteArchivo archCliente;
     DetalleVentaArchivo archDetalle;
 
     int tipo = PedirEnteroValido("TIPO CLIENTE: 1. PARTICULAR / 2. EMPRESA ");
     long long documento;
-
     if (tipo == 1) {
         documento = PedirEnteroValido("DNI: ");
     }
@@ -22,31 +23,36 @@ int VentaArchivo::altaVenta() {
     else {
         return -1;
     }
-
     int posCliente = archCliente.BuscarPorDocumento(documento);
     if (posCliente < 0) return -2;
-
     Cliente c = archCliente.leerRegistro(posCliente);
     if (!c.getEstado()) return -3;
 
-    // 🔹 generar ID
+    int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
+    int posEmp = archEmp.BuscarPorId(idEmpleado);
+    if (posEmp < 0) return -4;
+    Empleado e = archEmp.leerRegistro(posEmp);
+    if (!e.GetEstado()) return -5;
+    if (e.GetTipoCargo() != 2) return -6;
+
     int idVenta = generarIdVenta();
 
     Venta v;
-    v.cargar(idVenta, documento, 0.0f);
+    v.cargar(idEmpleado, idVenta, documento, 0.0f);
 
-    if (!agregarRegistro(v)) return 0;
+    if (!agregarRegistro(v)) return -7;
 
     int posVenta = contarRegistros() - 1;
 
     float total = archDetalle.altaDetalle(idVenta, v.getFechaVenta());
-    if (total <= 0) return -4;
+    if (total <= 0) return -7;
 
     v.setImporteTotal(total);
     modificarRegistro(v, posVenta);
 
     return 1;
 }
+
 
 int VentaArchivo::modificarRegistro(Venta reg, int pos) {
     FILE* pVenta = fopen(_nombreArchivo, "rb+");
