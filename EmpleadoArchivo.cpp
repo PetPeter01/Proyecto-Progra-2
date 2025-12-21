@@ -37,7 +37,7 @@ int EmpleadoArchivo::contarRegistros(){
     return cant;
 }
 
-int EmpleadoArchivo::BuscarPorDni(const char* dni) {
+int EmpleadoArchivo::BuscarPorDni(int  dniBuscado) {
     int cantidad = contarRegistros();
     if (cantidad == 0) return -1;
 
@@ -49,7 +49,7 @@ int EmpleadoArchivo::BuscarPorDni(const char* dni) {
            cout << "EMPLEADO DADO DE BAJA" << endl;
         }
 
-        if (strcmp(dni, reg.GetDni()) == 0) {
+        if (reg.GetDni() == dniBuscado) {
             return i;
         }
     }
@@ -57,6 +57,25 @@ int EmpleadoArchivo::BuscarPorDni(const char* dni) {
     return -1;
 }
 
+int EmpleadoArchivo::BuscarPorId(int idBuscado) {
+    int cantidad = contarRegistros();
+    if (cantidad == 0) return -1;
+
+    Empleado reg;
+
+    for (int i = 0; i < cantidad; i++) {
+        reg = leerRegistro(i);
+        if (!reg.GetEstado()){
+           cout << "EMPLEADO DADO DE BAJA" << endl;
+        }
+
+        if (reg.GetIdEmpleado() == idBuscado) {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 
 int EmpleadoArchivo::GenerarProximoId(){

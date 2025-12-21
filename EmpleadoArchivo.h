@@ -14,11 +14,11 @@ public:
     bool agregarRegistro(Empleado reg);
     Empleado leerRegistro(int pos);
     int contarRegistros();
-   int BuscarPorDni(const char* dni);
+    int BuscarPorDni(int dni);
 
     int GenerarProximoId();
-
-   bool modificarRegistro(Empleado reg, int pos);
+    int BuscarPorId(int idBuscado);
+    bool modificarRegistro(Empleado reg, int pos);
     bool altaEmpleado();
     void listarEmpleados();
     bool bajaLogica(int id);
