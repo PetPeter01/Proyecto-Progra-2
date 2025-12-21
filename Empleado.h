@@ -11,7 +11,7 @@
      bool _Estado;
  public:
     Empleado();
-    void Cargar(int id);
+    void Cargar(int id, int dni);
     void Mostrar();
 
     std::string GetTipoCargoeStr();

@@ -14,9 +14,9 @@ Empleado::Empleado(){
     _Estado=true;
 }
 
-void Empleado::Cargar(int id){
+void Empleado::Cargar(int id, int dni){
     char nombre[30], apellido[30], telefono[20], cargo[30];
-    int dni, tipoCargo;
+    int tipoCargo;
 
     setIdEmpleado(id);
 
@@ -63,15 +63,6 @@ void Empleado::Cargar(int id){
         if (setApellido(apellido)) break;
 
         cout << "Apellido invalido, solo letras" << endl;
-        system("pause");
-    }
-
-    while (true) {
-        dni = PedirEnteroValido("INGRESE EL DNI DEL EMPLEADO: ");
-
-        if (setDni(dni)) break;
-
-        cout << "DNI invalido" << endl;
         system("pause");
     }
 
