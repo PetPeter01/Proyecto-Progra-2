@@ -6,6 +6,7 @@ class Venta {
 private:
     int        _idVenta;
     long long  _idCliente;
+    int _idEmpleado;
     Fecha      _fechaVenta;
     float      _importeTotal;
     int        _formaPago;
@@ -15,11 +16,11 @@ public:
     Venta();
 
 
-    void cargar(int idVenta, long long idCliente, float importeTotal);
+    void cargar(int idEmpleado, int idVenta, long long idCliente, float importeTotal);
     void mostrar();
 
-
     int        getIdVenta();
+    int getIdEmpleado();
     long long  getIdCliente();
     Fecha      getFechaVenta();
     float      getImporteTotal();
@@ -28,6 +29,7 @@ public:
 
 
     void setIdVenta(int v);
+    void setIdEmpleado(int v);
     void setIdCliente(long long v);
     void setFechaVenta(Fecha v);
     void setImporteTotal(float v);

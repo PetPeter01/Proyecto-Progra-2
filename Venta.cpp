@@ -6,13 +6,14 @@ using namespace std;
 
 Venta::Venta() {
     _idVenta = 0;
+    _idEmpleado = 0;
     _idCliente = 0;
     _importeTotal = 0.0f;
     _formaPago = 0;
     _estado = false;
 }
 
-void Venta::cargar(int idVenta, long long idCliente, float importeTotal) {
+void Venta::cargar(int idEmpleado, int idVenta, long long idCliente, float importeTotal) {
     setIdVenta(idVenta);
     setIdCliente(idCliente);
     setImporteTotal(importeTotal);
@@ -44,6 +45,7 @@ void Venta::mostrar() {
 
 
 int Venta::getIdVenta(){ return _idVenta; }
+int Venta::getIdEmpleado(){ return _idEmpleado; }
 long long Venta::getIdCliente() { return _idCliente; }
 Fecha Venta::getFechaVenta(){ return _fechaVenta; }
 float Venta::getImporteTotal(){ return _importeTotal; }
@@ -59,6 +61,7 @@ bool      Venta::getEstado()         { return _estado; }
 
 
 void  Venta::setIdVenta(int v)               { _idVenta = v; }
+void Venta::setIdEmpleado(int v){ _idEmpleado = v; }
 void  Venta::setIdCliente(long long v)       { _idCliente = v; }
 void  Venta::setFechaVenta(Fecha v)          { _fechaVenta = v; }
 void  Venta::setImporteTotal(float v)        { _importeTotal = v; }
