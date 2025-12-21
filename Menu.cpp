@@ -732,12 +732,14 @@ int menuLogicoVentas() {
                 cout << "--------------------------\n";
                 int resultado = pV.altaVenta();
                 switch(resultado){
-                    case 1:  cout << "Compra registrada correctamente"; break;
-                    case 0:  cout << "ERROR AL GUARDAR VENTA"; break;
-                    case -1: cout << "ERROR: OPCION INVALIDA"; break;
-                    case -2: cout << "ERROR: CLIENTE NO ENCONTRADO."; break;
+                    case 1:  cout << "Venta registrada correctamente"; break;
+                    case -1: cout << "ERROR: INVALIDO"; break;
+                    case -2: cout << "ERROR: CLIENTE NO REGISTRADO."; break;
                     case -3: cout << "ERROR: CLIENTE DADO DE BAJA"; break;
-                    case -4: cout << "ERROR: NO SE PUDO REGISTRAR EL DETALLE O VENTA VACIA"; break;
+                    case -4: cout << "ERROR: EMPLEADO NO REGISTRADO."; break;
+                    case -5: cout << "ERROR: EMPLEADO DADO DE BAJA"; break;
+                    case -6: cout << "ERROR: EMPLEADO SIN PERMISOS"; break;
+                    case -7: cout << "ERROR AL GUARDAR LA VENTA"; break;
                 }
                 system("pause");
                 break;
@@ -847,11 +849,15 @@ int menuLogicoCompras() {
                 cout << "--------------------------\n";
                 int resultado = cArch.altaCompra();
                 switch(resultado){
-                    case 0: cout << "ERROR DESCONOCIDO"; break;
-                    case 1: cout << "Compra registrada correctamente"; break;
-                    case -1: cout << "ERROR: PROVEEDOR NO REGISTRADO"; break;
-                    case -2: cout << "ERROR: PROVEEDOR INACTIVO"; break;
-                    case -3: cout << "ERROR: ERROR AL CARGAR DETALLE"; break;
+                    case 0: cout << "ERROR DESCONOCIDO\n"; break;
+                    case 1: cout << "Compra registrada correctamente\n"; break;
+                    case -1: cout << "ERROR: PROVEEDOR NO REGISTRADO\n"; break;
+                    case -2: cout << "ERROR: PROVEEDOR INACTIVO\n"; break;
+                    case -3: cout << "ERROR: EMPLEADO NO REGISTRADO\n"; break;
+                    case -4: cout << "ERROR: EMPLEADO INACTIVO\n"; break;
+                    case -5: cout << "ERROR: EMPLEADO NO TIENE PERMISOS\n"; break;
+                    case -6: cout << "ERROR: NO SE PUDO GUARDAR LA COMPRA\n"; break;
+                    case -7: cout << "ERROR: ERROR AL CARGAR DETALLE\n"; break;
                 }
                 system("pause");
                 break;
@@ -1074,8 +1080,20 @@ int menuLogicoEmpleados() {
         switch (opcion) {
             case 0: {
                 cout << "--- ALTA EMPLEADO ---\n";
-                arch.altaEmpleado();
-                cout << "CLIENTE CARGADO CORRECTAMENTE" << endl;
+                int dni = PedirEnteroValido("DNI: ");
+                int resultado = arch.altaEmpleado(dni);
+                switch (resultado) {
+                    case 1:
+                        cout << "Empleado dado de alta correctamente.\n"; break;
+                    case 2:
+                        cout << "Empleado reactivado correctamente.\n"; break;
+                    case 0:
+                        cout << "El empleado ya existe y se encuentra activo.\n"; break;
+                    case -1:
+                        cout << "Error al guardar el empleado.\n"; break;
+                    default:
+                        cout << "Error desconocido.\n"; break;
+                }
                 system("pause");
                 break;
             }
