@@ -1,5 +1,6 @@
 #include "CompraArchivo.h"
 #include "ProveedorArchivo.h"
+#include "EmpleadoArchivo.h"
 #include "DetalleCompraArchivo.h"
 #include "FuncionesGenerales.h"
 #include <iostream>
@@ -8,37 +9,42 @@
 using namespace std;
 
 int CompraArchivo::altaCompra() {
-    ProveedorArchivo     archProv;
+    ProveedorArchivo archProv;
     DetalleCompraArchivo archDet;
+    EmpleadoArchivo archEmp;
 
     cout << "ALTA DE COMPRA\n";
     cout << "-------------------------\n";
 
+
+    int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
+    int posEmp = archEmp.BuscarPorId(idEmpleado);
+    if(posEmp < 0) return -3;
+    Empleado e = archEmp.leerRegistro(posEmp);
+    if(!e.GetEstado()) return -4;
+    if(e.GetTipoCargo() != 1) return -5;
+
     int idProveedor = PedirEnteroValido("ID PROVEEDOR: ");
     int posProv = archProv.buscarPorId(idProveedor);
     if (posProv < 0) return -1;
-
     Proveedor p = archProv.leerRegistro(posProv);
     if (!p.getEstado()) return -2;
-
-    int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
 
     int idCompra = getProximoId();
 
     Compra c;
     c.cargar(idCompra, idProveedor, idEmpleado, 0.0f);
 
-    if (!agregarRegistro(c)) return 0;
+    if (!agregarRegistro(c)) return -6;
 
     int posCompra = contarRegistros() - 1;
 
     float total = archDet.altaDetalle(idCompra, c.getFechaCompra());
-    if (total <= 0) return -3;
+    if (total <= 0) return -7;
 
     c.setImporte(total);
     modificarRegistro(c, posCompra);
 
-    cout << "Compra registrada correctamente.\n";
     return 1;
 }
 
