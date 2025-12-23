@@ -28,4 +28,5 @@ public:
     void BuscarMayorImportePorAnio();
     float recaudacionAnual(int anio);
     float recaudacionPorCliente(long long idCliente);
+    float recaudacionPorEmpleado(int idEmpleado);
 };

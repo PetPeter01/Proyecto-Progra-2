@@ -2,7 +2,10 @@
 #include "ProveedorArchivo.h"
 #include "EmpleadoArchivo.h"
 #include "DetalleCompraArchivo.h"
+#include "StockArchivo.h"
+#include "MovimientoStockArchivo.h"
 #include "FuncionesGenerales.h"
+#include "Fecha.h"
 #include <iostream>
 #include <cstdio>
 
@@ -47,7 +50,6 @@ int CompraArchivo::altaCompra() {
 
     return 1;
 }
-
 
 int CompraArchivo::modificarRegistro(Compra reg, int pos) {
     FILE* pCompra = fopen(_nombreArchivo, "rb+");
@@ -120,17 +122,42 @@ int CompraArchivo::contarRegistros() {
 }
 
 bool CompraArchivo::listarRegistros() {
-    FILE*  p = fopen(_nombreArchivo, "rb");
-    Compra c;
+    ProveedorArchivo archiProv;
+    EmpleadoArchivo archiEmple;
+    DetalleCompraArchivo detArch;
 
-    if (p == nullptr) return false;
-
-    while (fread(&c, tamanioRegistro, 1, p) == 1) {
-        if (!c.getEstado()) continue;
-        c.mostrar();
+    int cant = contarRegistros();
+    if (cant == 0) {
+        std::cout << "No hay compras registradas.\n";
+        return false;
     }
 
-    fclose(p);
+    for(int i = 0; i < cant; i++){
+        Compra c = leerRegistro(i);
+
+        if(c.getEstado()){
+
+            int posProv = archiProv.buscarPorId(c.getIdProveedor());
+            Proveedor prov = archiProv.leerRegistro(posProv);
+
+            int posEmple = archiEmple.BuscarPorId(c.getIdEmpleado());
+            Empleado emple = archiEmple.leerRegistro(posEmple);
+
+            std::cout << "ID: " << c.getIdCompra() << std::endl;
+            std::cout << "Proveedor: " << prov.getNombre() << std::endl;
+            std::cout << "id proveedor " << c.getIdProveedor() << std::endl;
+            std::cout << "Empleado: " << emple.GetNombre() << " " << emple.GetApellido() << endl;
+            std::cout << "id empleado: " << c.getIdEmpleado() << std::endl;
+            std::cout << "Importe: $" << c.getImporte() << std::endl;
+            std::cout << "Detalles:\n";
+
+            int cantDetalles = detArch.listarPorCompra(c.getIdCompra());
+            if (cantDetalles == 0) {
+                std::cout << "   (Sin ítems)\n";
+            }
+            std::cout << "------------------------------\n\n";
+        }
+    }
     return true;
 }
 
@@ -144,17 +171,6 @@ int CompraArchivo::ModificarRegistro(Compra reg, int pos) {
 
     if (escribio != 1) return -2;
     return 1;
-}
-
-bool CompraArchivo::bajaLogica(int idCompra) {
-    int pos = buscarPorId(idCompra);
-    if (pos < 0) return false;
-
-    Compra c = leerRegistro(pos);
-    if (!c.getEstado()) return false;
-
-    c.setEstado(false);
-    return (ModificarRegistro(c, pos) == 1);
 }
 
 int CompraArchivo::buscarPorId(int idCompra) {
@@ -175,14 +191,91 @@ int CompraArchivo::buscarPorId(int idCompra) {
     return -1;
 }
 
-int CompraArchivo::reactivarCompra(int idCompra) {
-    int pos = buscarPorId(idCompra);
+int CompraArchivo::bajaLogica(int id) {
+    int pos = buscarPorId(id);
     if (pos < 0) return -1;
 
-    Compra c = leerRegistro(pos);
-    if (c.getEstado()) return 0;
+    Compra compra = leerRegistro(pos);
+    if (!compra.getEstado()) return -2;
 
-    c.setEstado(true);
-    if (ModificarRegistro(c, pos) == 1) return 1;
-    return -2;
+    Fecha fecha;
+    fecha.cargar();
+
+    DetalleCompraArchivo detArch;
+
+    int puede = detArch.puedeAnularCompra(id);
+    if (puede == -1) return -4;
+    if (puede == 0) return -3;
+
+    compra.setEstado(false);
+    modificarRegistro(compra, pos);
+
+    detArch.revertirCompra(id, fecha);
+
+    return 1;
 }
+
+float CompraArchivo::gastoPorEmpleado(int idEmpleado){
+    Compra reg;
+    float total = 0.0f;
+
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if(p == nullptr) return -1;
+
+    while(fread(&reg, tamanioRegistro, 1, p) == 1){
+        if(reg.getIdEmpleado() == idEmpleado && reg.getEstado()){
+            total += reg.getImporte();
+        }
+    }
+
+    fclose(p);
+    return total;
+}
+
+float CompraArchivo::gastoAnual(int anio) {
+    Compra compra;
+    float total = 0.0f;
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (p == nullptr) return -1;
+
+    while (fread(&compra, tamanioRegistro, 1, p) == 1) {
+        if (compra.getEstado() && compra.getFechaCompra().getAnio() == anio) {
+            total += compra.getImporte();
+        }
+    }
+
+    fclose(p);
+    return total;
+}
+
+int CompraArchivo::listarComprasPorEmpleado(int idEmpleado) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (!p) {
+        return -1;
+    }
+
+    Compra compra;
+    bool encontro = false;
+
+    cout << "COMPRAS DEL EMPLEADO " << idEmpleado << ":\n";
+    cout << "==========================================\n";
+
+    while (fread(&compra, tamanioRegistro, 1, p) == 1) {
+        if (compra.getIdEmpleado() == idEmpleado && compra.getEstado()) {
+            encontro = true;
+            compra.mostrar();
+            cout << "------------------------------\n";
+        }
+    }
+
+    fclose(p);
+
+    if (!encontro) {
+        return -2;
+    }
+
+    return 1;
+}
+
+
+

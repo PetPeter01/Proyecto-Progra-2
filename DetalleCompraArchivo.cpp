@@ -2,6 +2,8 @@
 #include "ProductoArchivo.h"
 #include "FuncionesGenerales.h"
 #include "StockArchivo.h"
+#include "MovimientoStockArchivo.h"
+#include <time.h>
 #include <iostream>
 #include <cstdio>
 
@@ -39,7 +41,7 @@ float DetalleCompraArchivo::altaDetalle(int idCompra, Fecha fechaCompra) {
         int guardo = agregarRegistro(det);
         if (guardo == 1) {
             cout << "Detalle de compra guardado con exito.\n";
-            total += det.getCantidad() * det.getCostoUnitario();
+            total += det.getSubtotal();
             stockArch.sumarStock(idProducto, det.getCantidad(), fechaCompra);
         } else {
             cout << "Error al guardar el detalle de compra.\n";
@@ -79,17 +81,19 @@ int DetalleCompraArchivo::agregarRegistro(DetalleCompra reg) {
 
 int DetalleCompraArchivo::listarPorCompra(int idCompra) {
     FILE* p = fopen(_nombreArchivo, "rb");
-    if (!p) {
-        cout << "ERROR DE ARCHIVO\n";
-        return 0;
-    }
-
+    if (!p) { std::cout << "ERROR DE ARCHIVO\n"; return 0; }
     DetalleCompra d;
+    ProductoArchivo archiProd;
     int cant = 0;
-
     while (fread(&d, tamanioRegistro, 1, p) == 1) {
         if (d.getIdCompra() == idCompra) {
-            d.mostrar();
+            int pos = archiProd.buscarPorId(d.getIdProducto());
+            Producto prod = archiProd.leerRegistro(pos);
+
+            std::cout << "   - Prod: "   << d.getIdProducto() << " - " << prod.getDescripcion()
+                      << " | Cant: "      << d.getCantidad()
+                      << " | P.U.: "      << d.getCostoUnitario()
+                      << " | Subtotal: "  << d.getSubtotal() << '\n';
             cant++;
         }
     }
@@ -113,3 +117,48 @@ float DetalleCompraArchivo::totalPorCompra(int idCompra) {
     fclose(p);
     return total;
 }
+
+int DetalleCompraArchivo::puedeAnularCompra(int idCompra) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (!p) return -1;
+
+    DetalleCompra det;
+    StockArchivo stockArch;
+
+    while (fread(&det, sizeof(DetalleCompra), 1, p) == 1) {
+        if (det.getIdCompra() == idCompra) {
+            int stockActual = stockArch.getStock(det.getIdProducto());
+            if (stockActual < det.getCantidad()) {
+                fclose(p);
+                return 0; // no se puede
+            }
+        }
+    }
+
+    fclose(p);
+    return 1; // se puede
+}
+
+int DetalleCompraArchivo::revertirCompra(int idCompra, Fecha fecha) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (!p) return -1;
+
+    DetalleCompra det;
+    StockArchivo stockArch;
+    MovimientoStockArchivo movArch;
+
+    while (fread(&det, sizeof(DetalleCompra), 1, p) == 1) {
+        if (det.getIdCompra() == idCompra) {
+            stockArch.restarStock(det.getIdProducto(), det.getCantidad(), fecha);
+
+            MovimientoStock mov;
+            mov.cargar(det.getIdProducto(), det.getCantidad(),"EGRESO", fecha);
+            movArch.agregarRegistro(mov);
+        }
+    }
+
+    fclose(p);
+    return 1;
+}
+
+

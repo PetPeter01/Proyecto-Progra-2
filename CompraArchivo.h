@@ -22,7 +22,10 @@ public:
     bool  listarRegistros();
     int   generarIdCompra();
     int   ModificarRegistro(Compra reg, int pos);
-    bool  bajaLogica(int idCompra);
+    int  bajaLogica(int idCompra);
     int   buscarPorId(int idCompra);
     int   reactivarCompra(int idCompra);
+    float gastoPorEmpleado(int idEmpleado);
+    float gastoAnual(int anio);
+    int listarComprasPorEmpleado(int idEmpleado);
 };

@@ -109,14 +109,3 @@ int DetalleVentaArchivo::listarPorVenta(int idVenta) {
     return cant;
 }
 
-float DetalleVentaArchivo::totalPorVenta(int idVenta) {
-    FILE* p = fopen(_nombreArchivo, "rb");
-    if (!p) return 0.0f;
-
-    DetalleVenta d; float total = 0.0f;
-    while (fread(&d, tamanioRegistro, 1, p) == 1) {
-        if (d.getIdVenta() == idVenta) total += d.getSubtotal();
-    }
-    fclose(p);
-    return total;
-}

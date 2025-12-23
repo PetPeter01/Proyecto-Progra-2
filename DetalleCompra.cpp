@@ -10,6 +10,7 @@ DetalleCompra::DetalleCompra() {
     _idProducto      = 0;
     _cantidad        = 0;
     _costoUnitario   = 0.0f;
+    _subtotal = 0.0f;
 }
 
 void DetalleCompra::cargar(int idDetalle, int idCompra, int idProducto) {
@@ -37,6 +38,9 @@ void DetalleCompra::cargar(int idDetalle, int idCompra, int idProducto) {
             break;
         }
     }
+
+    float subtotal = _costoUnitario * _cantidad;
+    setSubtotal(subtotal);
 }
 
 void DetalleCompra::mostrar() {
@@ -45,7 +49,7 @@ void DetalleCompra::mostrar() {
     cout << "ID Producto: "      << _idProducto      << endl;
     cout << "Cantidad: "         << _cantidad        << endl;
     cout << "Costo Unitario: $"  << _costoUnitario   << endl;
-    cout << "Subtotal: $"        << (_cantidad * _costoUnitario) << endl;
+    cout << "Subtotal: $"        << _subtotal << endl;
     cout << "--------------------------------\n";
 }
 
@@ -66,9 +70,18 @@ bool DetalleCompra::setCostoUnitario(float costo) {
     return true;
 }
 
+bool DetalleCompra::setSubtotal(float subtotal){
+    if(subtotal>0){
+        _subtotal = subtotal;
+        return true;
+    }
+    return false;
+}
+
 // Getters
 int   DetalleCompra::getIdDetalleCompra() { return _idDetalleCompra; }
 int   DetalleCompra::getIdCompra()        { return _idCompra; }
 int   DetalleCompra::getIdProducto()      { return _idProducto; }
 int   DetalleCompra::getCantidad()        { return _cantidad; }
 float DetalleCompra::getCostoUnitario()   { return _costoUnitario; }
+float DetalleCompra::getSubtotal() { return _subtotal; }

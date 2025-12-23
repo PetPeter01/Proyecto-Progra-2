@@ -90,7 +90,7 @@ bool StockArchivo::sumarStock(int idProducto, int cantidad, Fecha fecha) {
 
     MovimientoStock mov;
     MovimientoStockArchivo movArch;
-    mov.cargar(idProducto, cantidad, "COMPRA", fecha);
+    mov.cargar(idProducto, cantidad, "INGRESO", fecha);
     movArch.agregarRegistro(mov);
     return true;
 }
@@ -109,7 +109,7 @@ bool StockArchivo::restarStock(int idProducto, int cantidad, Fecha fecha) {
 
     MovimientoStock mov;
     MovimientoStockArchivo movArch;
-    mov.cargar(idProducto, cantidad, "VENTA", fecha);
+    mov.cargar(idProducto, cantidad, "EGRESO", fecha);
     movArch.agregarRegistro(mov);
     return true;
 }

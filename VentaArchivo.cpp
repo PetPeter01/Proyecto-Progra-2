@@ -12,6 +12,13 @@ int VentaArchivo::altaVenta() {
     ClienteArchivo archCliente;
     DetalleVentaArchivo archDetalle;
 
+    int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
+    int posEmp = archEmp.BuscarPorId(idEmpleado);
+    if (posEmp < 0) return -4;
+    Empleado e = archEmp.leerRegistro(posEmp);
+    if (!e.GetEstado()) return -5;
+    if (e.GetTipoCargo() != 2) return -6;
+
     int tipo = PedirEnteroValido("TIPO CLIENTE: 1. PARTICULAR / 2. EMPRESA ");
     long long documento;
     if (tipo == 1) {
@@ -27,13 +34,6 @@ int VentaArchivo::altaVenta() {
     if (posCliente < 0) return -2;
     Cliente c = archCliente.leerRegistro(posCliente);
     if (!c.getEstado()) return -3;
-
-    int idEmpleado = PedirEnteroValido("ID EMPLEADO: ");
-    int posEmp = archEmp.BuscarPorId(idEmpleado);
-    if (posEmp < 0) return -4;
-    Empleado e = archEmp.leerRegistro(posEmp);
-    if (!e.GetEstado()) return -5;
-    if (e.GetTipoCargo() != 2) return -6;
 
     int idVenta = generarIdVenta();
 
@@ -293,6 +293,19 @@ float VentaArchivo::recaudacionPorCliente(long long idCliente) {
     return total;
 }
 
+float VentaArchivo::recaudacionPorEmpleado(int idEmpleado){
+    Venta venta;
+    float total = 0.0f;
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if(p == nullptr) return -1;
 
+    while(fread(&venta, sizeof(Venta), 1, p) == 1){
+        if(venta.getIdEmpleado() == idEmpleado && venta.getEstado()){
+            total += venta.getImporteTotal();
+        }
+    }
+    fclose(p);
+    return total;
+}
 
 

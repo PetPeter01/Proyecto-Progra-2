@@ -55,7 +55,7 @@ bool MovimientoStock::setCantidad(int cantidad) {
 void MovimientoStock::setFecha(Fecha fecha) { _fecha = fecha; }
 
 void MovimientoStock::setTipoMovimiento(const char* tipo) {
-    if (strcmp(tipo, "COMPRA") == 0 || strcmp(tipo, "VENTA") == 0) {
+    if (strcmp(tipo, "INGRESO") == 0 || strcmp(tipo, "EGRESO") == 0) {
         strcpy(_tipoMovimiento, tipo);
     }
 }
@@ -63,9 +63,9 @@ void MovimientoStock::setTipoMovimiento(const char* tipo) {
 void MovimientoStock::setEstado(bool estado) { _estado = estado; }
 
 int MovimientoStock::getFactorMovimiento() {
-    if (strcmp(_tipoMovimiento, "COMPRA") == 0) {
+    if (strcmp(_tipoMovimiento, "INGRESO") == 0) {
         return 1; // Aumenta stock
-    } else if (strcmp(_tipoMovimiento, "VENTA") == 0) {
+    } else if (strcmp(_tipoMovimiento, "EGRESO") == 0) {
         return -1; // Disminuye stock
     }
     return 0;

@@ -201,7 +201,7 @@ int mostrarMenuProductos() {
 
 int mostrarMenuVentas() {
     int y = 0;
-    const int cantidadOpciones = 8;
+    const int cantidadOpciones = 9;
     bool seleccionar = false;
     int yAnterior = -1;
 
@@ -214,7 +214,8 @@ int mostrarMenuVentas() {
     rlutil::locate(55, 15); cout << " MAYOR IMPORTE POR ANIO";
     rlutil::locate(55, 16); cout << " RECAUDACION ANUAL";
     rlutil::locate(55, 17); cout << " RECAUDACION POR CLIENTE";
-    rlutil::locate(55, 18); cout << " ATRAS";
+    rlutil::locate(55, 18); cout << " RECAUDACION POR EMPLEADO";
+    rlutil::locate(55, 19); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -329,7 +330,7 @@ int mostrarMenuEmpleados() {
 
 int mostrarMenuCompras() {
     int y = 0;
-    const int cantidadOpciones = 6;
+    const int cantidadOpciones = 7;
     bool seleccionar = false;
     int yAnterior = -1;
 
@@ -340,7 +341,8 @@ int mostrarMenuCompras() {
     rlutil::locate(55, 13); cout << " LISTAR COMPRAS";
     rlutil::locate(55, 14); cout << " GASTO ANUAL";
     rlutil::locate(55, 15); cout << " LISTAR COMPRAS POR EMPLEADO";
-    rlutil::locate(55, 16); cout << " ATRAS";
+    rlutil::locate(55, 16); cout << " GASTO POR EMPLEADO";
+    rlutil::locate(55, 17); cout << " ATRAS";
 
     while (!seleccionar) {
         if (y != yAnterior) {
@@ -823,7 +825,29 @@ int menuLogicoVentas() {
                 system("pause");
                 break;
             }
-            case 7:
+            case 7:{
+                system("cls");
+                EmpleadoArchivo emp;
+                VentaArchivo vent;
+                float total=0.0f;
+                int cant=emp.contarRegistros();
+                for(int i=0;i<cant;i++){
+                    Empleado reg=emp.leerRegistro(i);
+                    if (!reg.GetEstado() || reg.GetTipoCargo() != 2) continue;
+
+                    int id=reg.GetIdEmpleado();
+                    total=vent.recaudacionPorEmpleado(id);
+                    if(total==0){
+                        cout << "EL EMPLEADO NO TUVO RECAUDACIONES" << endl;
+                    }
+                    cout << "EMPLEADO " << id << " - "
+                         << reg.GetNombre() << " " << reg.GetApellido()
+                         << " -> RECAUDO $ " << total;
+                }
+                system("pause");
+                break;
+            }
+            case 8:
                 cout << "Volviendo...\n";
                 break;
             default:
@@ -865,12 +889,17 @@ int menuLogicoCompras() {
             case 1: {
                 system("cls");
                 cout << "Borrar compra...\n";
-                int idCompra = PedirEnteroValido(
-                    "INGRESE EL ID DE LA COMPRA A BORRAR: "
-                );
-                bool ok = cArch.bajaLogica(idCompra);
-                cout << (ok ? "Baja realizada correctamente.\n"
-                            : "No se pudo dar de baja.\n");
+                int idCompra = PedirEnteroValido("INGRESE EL ID DE LA COMPRA A BORRAR: ");
+                int resultado = cArch.bajaLogica(idCompra);
+
+                switch(resultado){
+                    case 1: cout << "Compra cancelada correctamente\n"; break;
+                    case -1: cout << "ERROR: No existe una compra con ese id\n"; break;
+                    case -2: cout << "ERROR: Compra ya fue cancelada\n"; break;
+                    case -3: cout << "ERROR: el o los productos ya se vendieron\n"; break;
+                    case -4: cout << "ERROR: no se pudo abrri el archivo\n"; break;
+                    default: cout << "error desconocido " << resultado; break;
+                }
                 system("pause");
                 break;
             }
@@ -886,7 +915,7 @@ int menuLogicoCompras() {
                 system("cls");
                 cout << "GASTO ANUAL\n";
                 cout << "---------------------------------\n";
-                /*int anio = PedirEnteroValido("Anio: ");
+                int anio = PedirEnteroValido("Anio: ");
                 if (anio > 2000 && anio < 2999) {
                     float total = cArch.gastoAnual(anio);
                     if (total >= 0) {
@@ -898,24 +927,57 @@ int menuLogicoCompras() {
                 } else {
                     cout << "Anio invalido.\n";
                 }
-                system("pause");*/
+                system("pause");
                 break;
             }
             case 4: {
                 system("cls");
                 cout << "COMPRAS POR EMPLEADO\n";
                 cout << "---------------------------------\n";
-                /*int idEmpleado = PedirEnteroValido("ID del empleado: ");
-                cArch.listarComprasPorEmpleado(idEmpleado);
-                system("pause");*/
+                int idEmpleado = PedirEnteroValido("ID del empleado: ");
+
+                int resultado = cArch.listarComprasPorEmpleado(idEmpleado);
+
+                if (resultado == -1) {
+                    cout << "Error al abrir el archivo.\n";
+                } else if (resultado == -2) {
+                    cout << "No se encontraron compras para este empleado.\n";
+                }
+
+                system("pause");
                 break;
             }
-            case 5:
+            case 5: {
+                system("cls");
+                cout << "GASTO POR EMPLEADO (RESP. COMPRAS)\n";
+                cout << "---------------------------------\n";
+
+                EmpleadoArchivo empA;
+                CompraArchivo compA;
+
+                int cant = empA.contarRegistros();
+                for (int i = 0; i < cant; i++) {
+                    Empleado e = empA.leerRegistro(i);
+
+
+                    if (!e.GetEstado() || e.GetTipoCargo() != 1) continue;
+
+                    int idEmp = e.GetIdEmpleado();
+                    float total = compA.gastoPorEmpleado(idEmp);
+
+                    cout << "EMPLEADO " << idEmp << " - "
+                         << e.GetNombre() << " " << e.GetApellido()
+                         << " -> GASTO $ " << total << "\n";
+                }
+
+                system("pause");
+                break;
+        }
+            case 6:
                 cout << "Volviendo...\n";
                 break;
         }
-
-    } while (opcion != 5);
+    } while (opcion != 6);
 
     return 0;
 }
@@ -1083,14 +1145,11 @@ int menuLogicoEmpleados() {
                 int dni = PedirEnteroValido("DNI: ");
                 int resultado = arch.altaEmpleado(dni);
                 switch (resultado) {
-                    case 1:
-                        cout << "Empleado dado de alta correctamente.\n"; break;
-                    case 2:
-                        cout << "Empleado reactivado correctamente.\n"; break;
-                    case 0:
-                        cout << "El empleado ya existe y se encuentra activo.\n"; break;
-                    case -1:
-                        cout << "Error al guardar el empleado.\n"; break;
+                    case -1: cout << "ERROR: No se pudo guardar el empleado.\n"; break;
+                    case 1: cout << "Empleado agregado correctamente.\n"; break;
+                    case 2: cout << "Empleado reactivado correctamente.\n"; break;
+                    case 3: cout << "Empleado no se reactivo.\n"; break;
+                    case 4: cout << "ERROR: empleado ya existe.\n"; break;
                     default:
                         cout << "Error desconocido.\n"; break;
                 }

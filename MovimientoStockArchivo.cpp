@@ -2,16 +2,19 @@
 #include <iostream>
 
 int MovimientoStockArchivo::agregarRegistro(MovimientoStock reg){
-    FILE* pProd = fopen(_nombreArchivo, "ab");
-    if (pProd == nullptr) {
-        return -1; // error de archivo
+    reg.setIdMovimiento(getProximoId());
+
+    FILE* p = fopen(_nombreArchivo, "ab");
+    if (p == nullptr) {
+        return -1;
     }
 
-    int escribio = fwrite(&reg, tamanioRegistro, 1, pProd);
-    fclose(pProd);
+    int escribio = fwrite(&reg, tamanioRegistro, 1, p);
+    fclose(p);
 
     return escribio;
 }
+
 
 int MovimientoStockArchivo::getProximoId() {
     return contarRegistros() + 1;

@@ -19,4 +19,8 @@ public:
     int   agregarRegistro(DetalleCompra reg);
     int   listarPorCompra(int idCompra);
     float totalPorCompra(int idCompra);
+    int puedeAnularCompra(int idCompra);
+    int revertirCompra(int idCompra, Fecha fecha);
+
+
 };

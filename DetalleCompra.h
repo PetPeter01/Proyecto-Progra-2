@@ -7,6 +7,7 @@ private:
     int   _idProducto;
     int   _cantidad;
     float _costoUnitario;
+    float _subtotal;
 
 public:
     DetalleCompra();
@@ -20,6 +21,7 @@ public:
     void setIdProducto(int id);
     bool setCantidad(int cant);
     bool setCostoUnitario(float costo);
+    bool setSubtotal(float subtotal);
 
     // Getters
     int   getIdDetalleCompra();
@@ -27,4 +29,5 @@ public:
     int   getIdProducto();
     int   getCantidad();
     float getCostoUnitario();
+    float getSubtotal();
 };

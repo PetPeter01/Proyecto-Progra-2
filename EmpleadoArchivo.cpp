@@ -1,5 +1,6 @@
 #include <iostream>
 #include "EmpleadoArchivo.h"
+#include "FuncionesGenerales.h"
 using namespace std;
 
 
@@ -85,22 +86,38 @@ int EmpleadoArchivo::GenerarProximoId(){
 int EmpleadoArchivo::altaEmpleado(int dni){
     Empleado reg;
     int id = GenerarProximoId();
-
     int pos = BuscarPorDni(dni);
+
     if (pos < 0) {
         reg.Cargar(id, dni);
         reg.SetEstado(true);
-        return agregarRegistro(reg) == 1 ? 1 : -1;
+        if(agregarRegistro(reg)){
+            return 1;
+        }
+        return -1;
     }
 
     Empleado existente = leerRegistro(pos);
-    if (!existente.GetEstado()) {
-        existente.SetEstado(true);
-        modificarRegistro(existente, pos);
-        return 2;
-    }
 
-    return 0;
+    if (!existente.GetEstado()) {
+        int opcion;
+        while(true){
+            opcion = PedirEnteroValido("Empleado existe, pero esta inactivo, reactivar? 1. Si / 2. No: ");
+            if(opcion == 1 || opcion == 2){
+                break;
+            }
+            cout << "Opcion invalida, seleccione 1 o 2\n";
+            system("pause");
+        }
+
+        if(opcion == 1){
+            existente.SetEstado(true);
+            modificarRegistro(existente, pos);
+            return 2;
+        }
+        return 3;
+    }
+    return 4;
 }
 
 
@@ -116,6 +133,7 @@ void EmpleadoArchivo::listarEmpleados(){
     }
 
 }
+
 bool EmpleadoArchivo::modificarRegistro(Empleado reg, int pos){
     FILE* p = fopen(_NombreArchivo, "rb+");
     if(p == nullptr){
@@ -129,8 +147,6 @@ bool EmpleadoArchivo::modificarRegistro(Empleado reg, int pos){
     fclose(p);
     return ok;
 }
-
-
 
 bool EmpleadoArchivo::bajaLogica(int id){
     int CantidadRegistros = contarRegistros();
