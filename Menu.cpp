@@ -553,12 +553,27 @@ int menuLogicoCliente() {
                 system("cls");
                 cout << "Agregar cliente...\n";
                 cout << "--------------------------\n";
-
-                int tipo = PedirEnteroValido("Tipo cliente: 1. Particular / 2. Empresa: ");
-                long long documento = ValidarDocumentoSegunTipo(tipo);
-                if(documento > 0) {
-                    cA.altaCliente(documento, tipo);
+                int tipo;
+                long long documento;
+                while(true){
+                    tipo = PedirEnteroValido("Tipo cliente: 1. Particular / 2. Empresa: ");
+                    if(tipo ==1 || tipo == 2){
+                        documento = ValidarDocumentoSegunTipo(tipo);
+                        break;
+                    }
+                    cout << "opcion invalida.\n";
                 }
+                int resultado = cA.altaCliente(documento, tipo);
+                switch (resultado) {
+                    case -1: cout << "ERROR: No se pudo guardar el cliente.\n"; break;
+                    case 1: cout << "Cliente agregado correctamente.\n"; break;
+                    case 2: cout << "Cliente reactivado correctamente.\n"; break;
+                    case 3: cout << "Cliente no se reactivo.\n"; break;
+                    case 4: cout << "ERROR: Cliente ya existe.\n"; break;
+                    default:
+                        cout << "Error desconocido.\n"; break;
+                }
+                system("pause");
                 break;
             }
             case 1: {

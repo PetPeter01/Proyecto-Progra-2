@@ -93,12 +93,16 @@ int DetalleVentaArchivo::listarPorVenta(int idVenta) {
     FILE* p = fopen(_nombreArchivo, "rb");
     if (!p) { std::cout << "ERROR DE ARCHIVO\n"; return 0; }
 
+    ProductoArchivo archiProd;
     DetalleVenta d;
     int cant = 0;
 
     while (fread(&d, tamanioRegistro, 1, p) == 1) {
         if (d.getIdVenta() == idVenta) {
-            std::cout << "   - Prod: "   << d.getIdProducto()
+            int pos = archiProd.buscarPorId(d.getIdProducto());
+            Producto prod = archiProd.leerRegistro(pos);
+
+            std::cout << "   - Prod: "   << d.getIdProducto() << " - " << prod.getDescripcion()
                       << " | Cant: "      << d.getCantidad()
                       << " | P.U.: "      << d.getPrecioUnitario()
                       << " | Subtotal: "  << d.getSubtotal() << '\n';

@@ -2,9 +2,9 @@
 #include "FuncionesGenerales.h"
 #include <iostream>
 #include <string.h>
-//jola prueba2
 
 Cliente::Cliente() {
+    _idCliente = 0;
     _tipoCliente = 0;
     _documento = 0;
     strcpy(_nombre, "");
@@ -15,10 +15,13 @@ Cliente::Cliente() {
     _estado = true;
 }
 
- void Cliente::cargar(long long documento, int tipo) {
+ void Cliente::cargar(long long documento, int tipo, int id) {
      char nombre[30], apellido[30], numeroTelefono[11], correoElectronico[50], direccion [50];
      _tipoCliente = tipo;
      _documento = documento;
+
+    setIdCliente(id);
+
      if(tipo==1){
         while(true){
             std::cout<< "Nombre: ";
@@ -26,7 +29,7 @@ Cliente::Cliente() {
             if(setNombre(nombre)){
                 break;
             }
-        std::cout<< "Solo letras.";
+        std::cout<< "Solo letras.\n";
         }
 
         while(true){
@@ -35,7 +38,7 @@ Cliente::Cliente() {
             if(setApellido(apellido)){
                 break;
             }
-        std::cout<< "Solo letras.";
+        std::cout<< "Solo letras.\n";
         }
      }
 
@@ -46,7 +49,7 @@ Cliente::Cliente() {
             if(setNombre(nombre)){
                 break;
             }
-        std::cout<< "Solo letras.";
+        std::cout<< "Solo letras.\n";
         }
 
         strcpy(_apellido, "");
@@ -55,12 +58,11 @@ Cliente::Cliente() {
      while (true){
         std::cout<< "Ingrese el numero telefonico: ";
         std::cin.getline(numeroTelefono, 20);
-        if(setNumeroTelefono(numeroTelefono)){
-                break;
-        } else {
-            std::cout << "Numero de telefono invalido, solo debe contener numeros" << std::endl;
+        int resultado = setNumeroTelefono(numeroTelefono);
+        if(resultado==1){ break; }
+        if(resultado==-1){ std::cout << "Numero de telefono invalido, solo numeros\n"; }
+        if(resultado==-2){ std::cout << "Numero de telefono invalido, debe tener 10 digitos\n"; }
 
-        }
     }
     while (true){
         std::cout<< "Ingrese el correo electronico: ";
@@ -68,7 +70,7 @@ Cliente::Cliente() {
         if(setCorreoElectronico(correoElectronico)){
                 break;
         } else {
-            std::cout << "Correo electronico invalido" << std::endl;
+            std::cout << "Correo electronico invalido\n";
 
         }
     }
@@ -79,7 +81,7 @@ Cliente::Cliente() {
         if(setDireccion(direccion)){
             break;
         } else {
-            std::cout<< "Direccion invalida"<< std::endl;
+            std::cout<< "Direccion invalida\n";
         }
     }
 
@@ -88,6 +90,7 @@ Cliente::Cliente() {
 
 void Cliente::mostrar(){
     int tipo = getTipoCliente();
+    std::cout << "ID: " << getIdCliente() << std::endl;
     std::cout << "Tipo Cliente: " << getTipoClienteStr() << std::endl;
     if(tipo==1){
         std::cout<< "DNI: " << getDocumento() << std::endl;
@@ -106,6 +109,7 @@ void Cliente::mostrar(){
     std::cout << "--------------------------------"<< std::endl;
 }
 /// getters
+int Cliente::getIdCliente(){ return _idCliente; }
 int Cliente::getTipoCliente(){ return _tipoCliente; }
 long long Cliente::getDocumento() { return _documento; }
 char* Cliente::getNombre() { return _nombre; }
@@ -135,6 +139,9 @@ std::string Cliente::getEstadoStr(){
 
 //setters
 
+void Cliente::setIdCliente(int id){
+    _idCliente = id;
+}
 bool Cliente::setTipoCliente(int tipoCliente){
     if(tipoCliente == 1 || tipoCliente == 2 ){
         _tipoCliente = tipoCliente;
@@ -173,22 +180,20 @@ bool Cliente::setApellido(char *apellido){
     return true;
 }
 
-bool Cliente::setNumeroTelefono(char *numeroTelefono){
+int Cliente::setNumeroTelefono(char *numeroTelefono){
     int len = strlen(numeroTelefono);
     int numero;
 
     if (!esEnteroValido(numeroTelefono, numero)) {
-        std::cout << "El numero de telefono debe contener solo numeros." << std::endl;
-        return false;
+        return -1;
     }
 
     if (len != 10) {
-        std::cout << "El numero de telefono debe tener exactamente 10 digitos." << std::endl;
-        return false;
+        return -2;
     }
 
     strcpy(_numeroTelefono, numeroTelefono);
-    return true;
+    return 1;
 }
 
 bool Cliente::setCorreoElectronico(char *correoElectronico) {

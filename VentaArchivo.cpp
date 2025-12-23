@@ -19,26 +19,16 @@ int VentaArchivo::altaVenta() {
     if (!e.GetEstado()) return -5;
     if (e.GetTipoCargo() != 2) return -6;
 
-    int tipo = PedirEnteroValido("TIPO CLIENTE: 1. PARTICULAR / 2. EMPRESA ");
-    long long documento;
-    if (tipo == 1) {
-        documento = PedirEnteroValido("DNI: ");
-    }
-    else if (tipo == 2) {
-        documento = PedirEnteroValidoLargo("CUIT: ");
-    }
-    else {
-        return -1;
-    }
-    int posCliente = archCliente.BuscarPorDocumento(documento);
-    if (posCliente < 0) return -2;
-    Cliente c = archCliente.leerRegistro(posCliente);
-    if (!c.getEstado()) return -3;
+    int idCliente = PedirEnteroValido("ID CLIENTE: ");
+    int posCli = archCliente.BuscarPorId(idCliente);
+    if(posCli < 0) return -1;
+    Cliente c = archCliente.leerRegistro(posCli);
+    if(!c.getEstado()) return -2;
 
     int idVenta = generarIdVenta();
 
     Venta v;
-    v.cargar(idEmpleado, idVenta, documento, 0.0f);
+    v.cargar(idEmpleado, idVenta, idCliente, 0.0f);
 
     if (!agregarRegistro(v)) return -7;
 
@@ -129,7 +119,6 @@ bool VentaArchivo::bajaLogica(int idVenta) {
     return archivo.ModificarRegistro(reg, pos) == 1;
 }
 
-
 int VentaArchivo::buscarPorId(int idVenta) {
     Venta venta;
     FILE* pVenta = fopen(_nombreArchivo, "rb");
@@ -152,40 +141,58 @@ int VentaArchivo::buscarPorId(int idVenta) {
 }
 
 bool VentaArchivo::listarRegistros() {
-    FILE* pVenta = fopen(_nombreArchivo, "rb");
-    if (!pVenta) return false;
-ClienteArchivo cliArch;
-    Venta reg;
+    ClienteArchivo cliArch;
+    EmpleadoArchivo empArch;
     DetalleVentaArchivo detArch;
 
-    while (fread(&reg, tamanioRegistro, 1, pVenta) == 1) {
-        if (!reg.getEstado()) continue;
-
-        reg.mostrar();
-
-        int pos = cliArch.BuscarPorDocumento(reg.getIdCliente());
-        if (pos >= 0) {
-            Cliente c = cliArch.leerRegistro(pos);
-            std::cout << " Tipo Cliente: ";
-            if (c.getTipoCliente() == 1)
-                std::cout << "Particular\n";
-            else if (c.getTipoCliente() == 2)
-                std::cout << "Empresa\n";
-        } else {
-            std::cout << " Tipo Cliente: (No encontrado)\n";
-        }
-
-
-        std::cout << " Detalles:\n";
-        int cant = detArch.listarPorVenta(reg.getIdVenta());
-        if (cant == 0) std::cout << "   (Sin ítems)\n";
-
-        std::cout << "------------------------------\n";
+    int cant = contarRegistros();
+    if (cant == 0) {
+        std::cout << "No hay ventas registradas.\n";
+        return false;
     }
 
-    fclose(pVenta);
+    for (int i = 0; i < cant; i++) {
+        Venta v = leerRegistro(i);
+
+        if (v.getEstado()) {
+
+            int posCli = cliArch.BuscarPorId(v.getIdCliente());
+            Cliente cli;
+            if (posCli >= 0) cli = cliArch.leerRegistro(posCli);
+
+            std::cout << "ID Venta: " << v.getIdVenta() << std::endl;
+
+            if (posCli >= 0) {
+                std::cout << "Cliente: "
+                          << cli.getNombre() << " " << cli.getApellido() << std::endl;
+                std::cout << "Tipo cliente: " << cli.getTipoClienteStr() << std::endl;
+            } else {
+                std::cout << "Cliente: (no encontrado)\n";
+            }
+
+            int posEmp = empArch.BuscarPorId(v.getIdEmpleado());
+            Empleado emp;
+            if (posEmp >= 0) emp = empArch.leerRegistro(posEmp);
+            std::cout << "Empleado: " << emp.GetNombre() << " " << emp.GetApellido() << std::endl;
+
+            std::cout << "Fecha: ";
+            std::cout << v.getFechaVenta().toString();
+            std::cout << std::endl;
+            std::cout << "Importe: $" << v.getImporteTotal() << std::endl;
+            std::cout << "Pago: " << v.getFormaPago() << std::endl;
+
+            std::cout << "Detalles:\n";
+            int cantDetalles = detArch.listarPorVenta(v.getIdVenta());
+            if (cantDetalles == 0) {
+                std::cout << "   (Sin ítems)\n";
+            }
+
+            std::cout << "------------------------------\n\n";
+        }
+    }
     return true;
 }
+
 
 int VentaArchivo::contarRegistros() {
     Venta venta;

@@ -2,28 +2,64 @@
 #include <cstdio>
 #include <cstring>
 #include "ClienteArchivo.h"
+#include "FuncionesGenerales.h"
 using namespace std;
 
 int ClienteArchivo::altaCliente(long long documento, int tipo) {
     Cliente reg;
-
+    int id = generarIdCliente();
     int pos = BuscarPorDocumento(documento);
+
     if (pos < 0) {
-        reg.cargar(documento, tipo);
+        reg.cargar(documento, tipo, id);
         reg.setEstado(true);
         if (agregarRegistro(reg) == 1) {
             return 1;
-        } else {
-            return -1;
         }
+        return -1;
     }
 
     Cliente existente = leerRegistro(pos);
     if (!existente.getEstado()) {
-        return -2;
+        int opcion;
+        while(true){
+            opcion = PedirEnteroValido("Cliente existe, pero esta inactivo, reactivar? 1. Si / 2. No: ");
+            if(opcion == 1 || opcion == 2){
+                break;
+            }
+            cout << "Opcion invalida, seleccione 1 o 2\n";
+            system("pause");
+        }
+
+        if(opcion == 1){
+            existente.setEstado(true);
+            modificarRegistro(existente, pos);
+            return 2;
+        }
+        return 3;
     }
 
-    return 0;
+    return 4;
+}
+
+int ClienteArchivo::contarRegistros() {
+    Cliente c;
+    FILE* cliente = fopen(_nombreArchivo, "rb");
+    if (cliente == nullptr) {
+        return 0;
+    }
+
+    int contador = 0;
+    while (fread(&c, tamanioRegistro, 1, cliente) == 1) {
+        contador++;
+    }
+
+    fclose(cliente);
+    return contador;
+}
+
+int ClienteArchivo::generarIdCliente() {
+    return contarRegistros() + 1;
 }
 
 int ClienteArchivo::agregarRegistro(Cliente reg) {
@@ -260,3 +296,22 @@ void ClienteArchivo::listarDocumentosDadosDeBaja() {
     fclose(p);
 }
 
+int ClienteArchivo::BuscarPorId(int idBuscado) {
+    int cantidad = contarRegistros();
+    if (cantidad == 0) return -1;
+
+    Cliente reg;
+
+    for (int i = 0; i < cantidad; i++) {
+        reg = leerRegistro(i);
+        if (!reg.getEstado()){
+           cout << "EMPLEADO DADO DE BAJA" << endl;
+        }
+
+        if (reg.getIdCliente() == idBuscado) {
+            return i;
+        }
+    }
+
+    return -1;
+}

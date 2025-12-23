@@ -19,6 +19,7 @@ void Empleado::Cargar(int id, int dni){
     int tipoCargo;
 
     setIdEmpleado(id);
+    setDni(dni);
 
     cout << "INGRESE EL TIPO DE CARGO DEL EMPLEADO" << endl;
     cout << "1) RESPONSABLE DE COMPRAS" << endl;

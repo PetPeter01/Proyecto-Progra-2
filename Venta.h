@@ -5,7 +5,7 @@
 class Venta {
 private:
     int        _idVenta;
-    long long  _idCliente;
+    int  _idCliente;
     int _idEmpleado;
     Fecha      _fechaVenta;
     float      _importeTotal;
@@ -16,12 +16,12 @@ public:
     Venta();
 
 
-    void cargar(int idEmpleado, int idVenta, long long idCliente, float importeTotal);
+    void cargar(int idEmpleado, int idVenta, int idCliente, float importeTotal);
     void mostrar();
 
     int        getIdVenta();
     int getIdEmpleado();
-    long long  getIdCliente();
+    int  getIdCliente();
     Fecha      getFechaVenta();
     float      getImporteTotal();
     std::string getFormaPago();
@@ -30,7 +30,7 @@ public:
 
     void setIdVenta(int v);
     void setIdEmpleado(int v);
-    void setIdCliente(long long v);
+    void setIdCliente(int v);
     void setFechaVenta(Fecha v);
     void setImporteTotal(float v);
     bool setFormaPago(int v);

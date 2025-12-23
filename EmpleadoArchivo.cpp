@@ -63,20 +63,15 @@ int EmpleadoArchivo::BuscarPorId(int idBuscado) {
     if (cantidad == 0) return -1;
 
     Empleado reg;
-
     for (int i = 0; i < cantidad; i++) {
         reg = leerRegistro(i);
-        if (!reg.GetEstado()){
-           cout << "EMPLEADO DADO DE BAJA" << endl;
-        }
-
         if (reg.GetIdEmpleado() == idBuscado) {
             return i;
         }
     }
-
     return -1;
 }
+
 
 
 int EmpleadoArchivo::GenerarProximoId(){

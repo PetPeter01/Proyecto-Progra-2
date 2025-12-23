@@ -130,13 +130,13 @@ int DetalleCompraArchivo::puedeAnularCompra(int idCompra) {
             int stockActual = stockArch.getStock(det.getIdProducto());
             if (stockActual < det.getCantidad()) {
                 fclose(p);
-                return 0; // no se puede
+                return 0;
             }
         }
     }
 
     fclose(p);
-    return 1; // se puede
+    return 1;
 }
 
 int DetalleCompraArchivo::revertirCompra(int idCompra, Fecha fecha) {

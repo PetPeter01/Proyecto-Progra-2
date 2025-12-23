@@ -13,7 +13,8 @@ Venta::Venta() {
     _estado = false;
 }
 
-void Venta::cargar(int idEmpleado, int idVenta, long long idCliente, float importeTotal) {
+void Venta::cargar(int idEmpleado, int idVenta, int idCliente, float importeTotal) {
+    setIdEmpleado(idEmpleado);
     setIdVenta(idVenta);
     setIdCliente(idCliente);
     setImporteTotal(importeTotal);
@@ -46,7 +47,7 @@ void Venta::mostrar() {
 
 int Venta::getIdVenta(){ return _idVenta; }
 int Venta::getIdEmpleado(){ return _idEmpleado; }
-long long Venta::getIdCliente() { return _idCliente; }
+int Venta::getIdCliente() { return _idCliente; }
 Fecha Venta::getFechaVenta(){ return _fechaVenta; }
 float Venta::getImporteTotal(){ return _importeTotal; }
 std::string Venta::getFormaPago() {
@@ -62,7 +63,7 @@ bool      Venta::getEstado()         { return _estado; }
 
 void  Venta::setIdVenta(int v)               { _idVenta = v; }
 void Venta::setIdEmpleado(int v){ _idEmpleado = v; }
-void  Venta::setIdCliente(long long v)       { _idCliente = v; }
+void  Venta::setIdCliente(int v)       { _idCliente = v; }
 void  Venta::setFechaVenta(Fecha v)          { _fechaVenta = v; }
 void  Venta::setImporteTotal(float v)        { _importeTotal = v; }
 bool  Venta::setFormaPago(int v) {

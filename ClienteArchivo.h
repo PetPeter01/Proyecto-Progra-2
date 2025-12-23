@@ -25,8 +25,11 @@ public:
     void listarDocumentosDadosDeBaja();
 
     // UTILIDADES
+    int generarIdCliente();
+    int contarRegistros();
     int modificarRegistro(Cliente reg, int pos);
     int BuscarPorDocumento(long long documentoBuscado);
     void BuscarPorNombre(const char* nombreBuscado);
     void BuscarPorApellido(const char* apellidoBuscado);
+    int BuscarPorId(int idBuscado);
 };

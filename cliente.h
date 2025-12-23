@@ -3,6 +3,7 @@
 
 class Cliente {
 private:
+    int _idCliente;
     int _tipoCliente;
     long long _documento;
     char _nombre[30];
@@ -14,9 +15,10 @@ private:
 
 public:
     Cliente();
-    void cargar(long long documento, int tipo);
+    void cargar(long long documento, int tipo, int id);
     void mostrar();
     /// getters
+    int getIdCliente();
     int getTipoCliente();
     long long getDocumento();
     char *getNombre();
@@ -28,12 +30,13 @@ public:
     std::string getTipoClienteStr() const;
     std::string getEstadoStr();
     //setters
+    void setIdCliente(int id);
     bool setTipoCliente(int tipoCliente);
     bool setDni(int dni);
     bool setCuit(long long cuit);
     bool setNombre(char *nombre);
     bool setApellido(char *apellido);
-    bool setNumeroTelefono(char *numeroTelefono);
+    int setNumeroTelefono(char *numeroTelefono);
     bool setCorreoElectronico(char *correoElectronico);
     bool setDireccion(char *direccion);
     bool setEstado(bool estado);
