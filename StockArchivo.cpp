@@ -73,6 +73,15 @@ int StockArchivo::getStock(int id){
     return stock;
 }
 
+bool StockArchivo::hayStockSuficiente(int idProducto, int cantidad) {
+    int pos = buscarPorIdProducto(idProducto);
+    if (pos < 0) return false;
+
+    Stock reg = leerRegistro(pos);
+    return reg.getCantidad() >= cantidad;
+}
+
+
 bool StockArchivo::sumarStock(int idProducto, int cantidad, Fecha fecha) {
     int pos = buscarPorIdProducto(idProducto);
 

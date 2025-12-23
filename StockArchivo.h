@@ -16,6 +16,7 @@ public:
     int modificarRegistro(Stock reg, int pos);
 
     int getStock(int idProducto);
+    bool hayStockSuficiente(int idProducto, int cantidad);
     bool sumarStock(int idProducto, int cantidad, Fecha fecha);
     bool restarStock(int idProducto, int cantidad, Fecha fecha);
 };
