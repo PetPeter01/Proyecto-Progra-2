@@ -765,10 +765,20 @@ int menuLogicoVentas() {
                 system("cls");
                 cout << "Borrar venta...\n";
                 int idVenta = PedirEnteroValido("INGRESE EL ID DE LA VENTA A BORRAR: ");
-                bool ok = pV.bajaLogica(idVenta);
-                cout << (ok ? "Baja realizada correctamente.\n" : "No se pudo dar de baja.\n");
+                int resultado = pV.bajaLogica(idVenta);
+
+                switch (resultado) {
+                case 1: cout << "La venta fue anulada correctamente.\n"; break;
+                case -1: cout << "ERROR: No existe una venta con ese ID.\n"; break;
+                case -2: cout << "ERROR: La venta ya se encuentra anulada.\n";break;
+                case -3: cout << "ERROR: No se pudo revertir la venta.\n"; break;
+                default:
+                    cout << "ERROR desconocido.\n";
+                    break;
+                }
+
                 system("pause");
-                break;
+
             }
             case 2: {
                 system("cls");
@@ -910,9 +920,10 @@ int menuLogicoCompras() {
                 switch(resultado){
                     case 1: cout << "Compra cancelada correctamente\n"; break;
                     case -1: cout << "ERROR: No existe una compra con ese id\n"; break;
-                    case -2: cout << "ERROR: Compra ya fue cancelada\n"; break;
-                    case -3: cout << "ERROR: el o los productos ya se vendieron\n"; break;
-                    case -4: cout << "ERROR: no se pudo abrri el archivo\n"; break;
+                    case -2: cout << "ERROR: Compra ya se encuentra cancelada\n"; break;
+                    case -3: cout << "ERROR: Parte del stock ya fue vendido\n"; break;
+                    case -4: cout << "ERROR: Problema al acceder al detalle de la compra\n"; break;
+                    case -5: cout << "ERROR: No se pudo revertir la compra.\n"; break;
                     default: cout << "error desconocido " << resultado; break;
                 }
                 system("pause");
