@@ -18,4 +18,5 @@ public:
     int agregarRegistro(DetalleVenta reg);
     int  listarPorVenta(int idVenta);
     float totalPorVenta(int idVenta);
+    int revertirVenta(int idVenta, Fecha fecha);
 };

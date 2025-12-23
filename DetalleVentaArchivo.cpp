@@ -3,6 +3,7 @@
 #include "ProductoArchivo.h"
 #include "DetalleVenta.h"
 #include "StockArchivo.h"
+#include "MovimientoStockArchivo.h"
 #include "FuncionesGenerales.h"
 using namespace std;
 
@@ -112,4 +113,27 @@ int DetalleVentaArchivo::listarPorVenta(int idVenta) {
     fclose(p);
     return cant;
 }
+
+int DetalleVentaArchivo::revertirVenta(int idVenta, Fecha fecha) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (!p) return -1;
+
+    DetalleVenta det;
+    StockArchivo stockArch;
+    MovimientoStockArchivo movArch;
+
+    while (fread(&det, sizeof(DetalleVenta), 1, p) == 1) {
+        if (det.getIdVenta() == idVenta) {
+            stockArch.sumarStock(det.getIdProducto(), det.getCantidad(), fecha);
+
+            MovimientoStock mov;
+            mov.cargar(det.getIdProducto(), det.getCantidad(), "INGRESO", fecha);
+            movArch.agregarRegistro(mov);
+        }
+    }
+
+    fclose(p);
+    return 1;
+}
+
 

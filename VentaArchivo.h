@@ -22,7 +22,7 @@ public:
     int generarIdVenta();
     int ModificarRegistro(Venta reg, int pos);
     int  reactivarVenta(int idVenta);
-    bool bajaLogica(int id);
+    int bajaLogica(int id);
 
     int buscarPorId(int idVenta);
     void BuscarMayorImportePorAnio();

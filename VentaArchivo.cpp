@@ -104,20 +104,26 @@ int VentaArchivo::ModificarRegistro(Venta reg, int pos) {
     return escribio;
 }
 
-bool VentaArchivo::bajaLogica(int idVenta) {
-    Venta reg;
-    VentaArchivo archivo(_nombreArchivo);
+int VentaArchivo::bajaLogica(int id) {
+    int pos = buscarPorId(id);
+    if (pos < 0) return -1;
 
-    int pos = archivo.buscarPorId(idVenta);
-    if (pos < 0) {
-        return false;
-    }
+    Venta v = leerRegistro(pos);
+    if (!v.getEstado()) return -2;
 
-    reg = archivo.leerRegistro(pos);
-    reg.setEstado(false);
+    Fecha fecha;
+    fecha.cargar();
 
-    return archivo.ModificarRegistro(reg, pos) == 1;
+    DetalleVentaArchivo detArch;
+    int res = detArch.revertirVenta(id, fecha);
+    if (res != 1) return -3;
+
+    v.setEstado(false);
+    modificarRegistro(v, pos);
+
+    return 1;
 }
+
 
 int VentaArchivo::buscarPorId(int idVenta) {
     Venta venta;
@@ -192,7 +198,6 @@ bool VentaArchivo::listarRegistros() {
     }
     return true;
 }
-
 
 int VentaArchivo::contarRegistros() {
     Venta venta;
