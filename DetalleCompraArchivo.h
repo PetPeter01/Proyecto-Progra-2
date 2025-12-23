@@ -15,6 +15,7 @@ public:
     }
 
     float altaDetalle(int idCompra, Fecha fecha);
+    int contarDetallesCompra(int idCompra);
     int getProximoId();
     int   agregarRegistro(DetalleCompra reg);
     int   listarPorCompra(int idCompra);

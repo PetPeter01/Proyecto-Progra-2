@@ -207,10 +207,10 @@ int CompraArchivo::bajaLogica(int id) {
     if (puede == -1) return -4;
     if (puede == 0) return -3;
 
+    int res = detArch.revertirCompra(id, fecha);
+    if(res !=1) return -5;
     compra.setEstado(false);
     modificarRegistro(compra, pos);
-
-    detArch.revertirCompra(id, fecha);
 
     return 1;
 }

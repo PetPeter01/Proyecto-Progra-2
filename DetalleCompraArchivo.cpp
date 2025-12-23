@@ -55,6 +55,23 @@ float DetalleCompraArchivo::altaDetalle(int idCompra, Fecha fechaCompra) {
     return total;
 }
 
+int DetalleCompraArchivo::contarDetallesCompra(int idCompra) {
+    FILE* p = fopen(_nombreArchivo, "rb");
+    if (!p) return 0;
+
+    DetalleCompra det;
+    int cont = 0;
+
+    while (fread(&det, sizeof(DetalleCompra), 1, p) == 1) {
+        if (det.getIdCompra() == idCompra) {
+            cont++;
+        }
+    }
+
+    fclose(p);
+    return cont;
+}
+
 int DetalleCompraArchivo::getProximoId() {
     FILE* p = fopen(_nombreArchivo, "rb");
     if (p == nullptr) return 1;
@@ -140,25 +157,53 @@ int DetalleCompraArchivo::puedeAnularCompra(int idCompra) {
 }
 
 int DetalleCompraArchivo::revertirCompra(int idCompra, Fecha fecha) {
+    int cant = contarDetallesCompra(idCompra);
+    if (cant == 0) return 0;
+
+    int* ids = new int[cant];
+    int* cants = new int[cant];
+
     FILE* p = fopen(_nombreArchivo, "rb");
-    if (!p) return -1;
+    if (!p) {
+        delete[] ids;
+        delete[] cants;
+        return -1;
+    }
 
     DetalleCompra det;
-    StockArchivo stockArch;
-    MovimientoStockArchivo movArch;
+    int i = 0;
 
     while (fread(&det, sizeof(DetalleCompra), 1, p) == 1) {
         if (det.getIdCompra() == idCompra) {
-            stockArch.restarStock(det.getIdProducto(), det.getCantidad(), fecha);
+            ids[i] = det.getIdProducto();
+            cants[i] = det.getCantidad();
+            i++;
+        }
+    }
+    fclose(p);
 
-            MovimientoStock mov;
-            mov.cargar(det.getIdProducto(), det.getCantidad(),"EGRESO", fecha);
-            movArch.agregarRegistro(mov);
+    StockArchivo stockArch;
+    for (int j = 0; j < cant; j++) {
+        if (!stockArch.hayStockSuficiente(ids[j], cants[j])) {
+            delete[] ids;
+            delete[] cants;
+            return -2;
         }
     }
 
-    fclose(p);
+    MovimientoStockArchivo movArch;
+    for (int j = 0; j < cant; j++) {
+        stockArch.restarStock(ids[j], cants[j], fecha);
+
+        MovimientoStock mov;
+        mov.cargar(ids[j], cants[j], "EGRESO", fecha);
+        movArch.agregarRegistro(mov);
+    }
+
+    delete[] ids;
+    delete[] cants;
     return 1;
 }
+
 
 
