@@ -854,7 +854,7 @@ int menuLogicoVentas() {
                 cout << "Opcion invalida\n";
                 system("pause");
         }
-    } while (opcion != 7);
+    } while (opcion != 8);
 
     return 0;
 }
