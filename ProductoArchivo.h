@@ -25,4 +25,5 @@ public:
     bool bajaLogica();
     int modificarRegistro(Producto reg, int pos);
     int buscarPorId(int idProducto);
+    void buscarProductoMenorTres();
 };

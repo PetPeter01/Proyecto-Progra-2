@@ -289,14 +289,18 @@ float VentaArchivo::recaudacionAnual(int anio) {
     return total;
 }
 
-float VentaArchivo::recaudacionPorCliente(long long idCliente) {
+float VentaArchivo::recaudacionPorCliente(long long documento) {
+    ClienteArchivo c;
+    int pos = c.BuscarPorDocumento(documento);
+    Cliente cliente = c.leerRegistro(pos);
+
     Venta venta;
     float total = 0;
     FILE* p = fopen(_nombreArchivo, "rb");
     if (p == nullptr) return -1;
 
     while (fread(&venta, sizeof(Venta), 1, p) == 1) {
-        if (venta.getEstado() && venta.getIdCliente() == idCliente) {
+        if (venta.getEstado() && cliente.getDocumento() == documento) {
             total += venta.getImporteTotal();
         }
     }

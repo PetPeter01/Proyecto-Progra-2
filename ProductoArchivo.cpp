@@ -217,3 +217,27 @@ int ProductoArchivo::buscarPorId(int idBuscado) {
     fclose(pProd);
     return -1;
 }
+
+// hacer un metodo que liste los productos con stock menor a tres
+
+void ProductoArchivo::buscarProductoMenorTres(){
+    StockArchivo stock;
+    int cantidad = contarRegistros();
+
+    for(int i; i<=cantidad; i++){
+        Producto p = leerRegistro(i);
+        cout<< p.getIdProducto();
+        int s = stock.getStock(p.getIdProducto());
+        cout << s;
+
+        if(s<3 && p.getEstado()){
+            p.mostrar();
+            system("pause");
+        }
+    }
+}
+
+
+
+
+

@@ -169,3 +169,21 @@ int ProveedorArchivo::reactivarProveedor(int idProveedor) {
     if (ok == 1) return 1;
     return -2;
 }
+
+/*void ProveedorArchivo::listarProveedores(){
+    Proveedor p;
+    int cantidad = contarRegistros();
+
+    int* ids = new int[cantidad];
+    char* nombre = new char [cantidad];
+    char* email = new char[cantidad];
+    bool* estado = new bool[cantidad];
+
+    for(int i; i<=cantidad; i++){
+        p = leerRegistro(i);
+        if(p.getEstado()){
+            ids[i] = p.getIdProveedor();
+            estado[i] = p.getEmail();
+        }
+    }
+} */

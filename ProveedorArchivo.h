@@ -26,4 +26,5 @@ public:
     int  buscarPorId(int idProveedor);
     int  buscarPorNombre(const char* nombreBuscado);
     int  reactivarProveedor(int idProveedor);
+    void listarProveedores();
 };
